@@ -3,12 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>✿ Sugarcloset — Preloved dengan Cinta ✿</title>
+<title>✿ Sugarcloset — Preloved dengan Cinta, Harga Ramah ✿</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Sugarcloset — Toko preloved dengan barang cantik, harga ramah, dan packing menggemaskan. Tas, sepatu, dress, aksesoris, dan buku dengan kualitas terkurasi.">
+<meta name="keywords" content="preloved, thrift, tas bekas, dress bekas, sepatu preloved, aksesoris murah, toko online, sugarcloset">
+<meta name="author" content="Sugarcloset">
+<meta name="theme-color" content="#FFB6D9">
+
+<!-- Open Graph (WhatsApp, Facebook, dll) -->
+<meta property="og:title" content="✿ Sugarcloset — Preloved dengan Cinta">
+<meta property="og:description" content="Barang cantik, harga ramah, packing menggemaskan. Cek koleksi preloved pilihan kami!">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://hansxf-ui.github.io/preview.jpg">
+<meta property="og:url" content="https://hansxf-ui.github.io/">
+<meta property="og:site_name" content="Sugarcloset">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="✿ Sugarcloset — Preloved dengan Cinta">
+<meta name="twitter:description" content="Barang cantik, harga ramah, packing menggemaskan.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎀</text></svg>">
+
+<!-- Structured Data (Google Rich Snippet) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "Sugarcloset",
+  "description": "Toko preloved dengan barang cantik, harga ramah, dan packing menggemaskan.",
+  "url": "https://hansxf-ui.github.io/",
+  "telephone": "+6281234567890",
+  "priceRange": "Rp",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "ID"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "127"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -23,7 +65,8 @@
         <nav class="nav">
             <a href="#home" class="nav-link">Beranda</a>
             <a href="#products" class="nav-link">Produk</a>
-            <a href="#about" class="nav-link">Tentang</a>
+            <a href="#testimonials" class="nav-link">Testimoni</a>
+            <a href="#faq" class="nav-link">FAQ</a>
             <a href="#contact" class="nav-link">Kontak</a>
         </nav>
         <div class="header-actions">
@@ -134,6 +177,18 @@
     </div>
 </section>
 
+<!-- ═══ TESTIMONI ═══ -->
+<section class="testimonials" id="testimonials">
+    <div class="container">
+        <div class="section-head">
+            <span class="section-badge">💖 Cerita Pembeli</span>
+            <h2 class="section-title">Apa Kata Mereka?</h2>
+            <p class="section-desc">Testimoni jujur dari pembeli yang sudah belanja di Sugarcloset.</p>
+        </div>
+        <div class="testimonial-grid" id="testimonialGrid"></div>
+    </div>
+</section>
+
 <section class="about" id="about">
     <div class="container about-inner">
         <div class="about-card">
@@ -151,6 +206,18 @@
             <h3>Ramah Bumi</h3>
             <p>Dengan beli preloved, kau bantu kurangi limbah fashion. Gaya tetap oke, bumi tetap senyum.</p>
         </div>
+    </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq" id="faq">
+    <div class="container">
+        <div class="section-head">
+            <span class="section-badge">❓ Pertanyaan Umum</span>
+            <h2 class="section-title">Yang Sering Ditanyakan</h2>
+            <p class="section-desc">Belum ketemu jawabannya? Chat kami langsung ya~</p>
+        </div>
+        <div class="faq-list" id="faqList"></div>
     </div>
 </section>
 
@@ -193,19 +260,15 @@
         </div>
         <div class="footer-links">
             <a href="#products">Produk</a>
-            <a href="#about">Tentang</a>
+            <a href="#testimonials">Testimoni</a>
+            <a href="#faq">FAQ</a>
             <a href="#contact">Kontak</a>
         </div>
         <div class="footer-copy"><p>© 2026 Sugarcloset · Dibuat dengan 💖</p></div>
     </div>
 </footer>
 
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/6281234567890?text=Halo%20kak%2C%20saya%20mau%20tanya" 
-   target="_blank" 
-   class="wa-float" 
-   id="waFloat"
-   title="Chat WhatsApp">
+<a href="https://wa.me/6281234567890?text=Halo%20kak%2C%20saya%20mau%20tanya" target="_blank" class="wa-float" id="waFloat" title="Chat WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.5 14.4C17.2 14.2 15.7 13.5 15.4 13.4C15.1 13.3 14.9 13.2 14.7 13.5C14.5 13.8 14 14.4 13.8 14.6C13.6 14.8 13.5 14.8 13.2 14.7C12.9 14.5 11.9 14.2 10.7 13.1C9.8 12.3 9.2 11.3 9 11C8.9 10.7 9 10.6 9.2 10.4C9.3 10.3 9.5 10 9.6 9.9C9.7 9.7 9.8 9.6 9.9 9.4C10 9.2 10 9 9.9 8.8C9.8 8.7 9.2 7.2 8.9 6.6C8.7 6 8.4 6.1 8.2 6.1C8 6.1 7.8 6.1 7.5 6.1C7.3 6.1 6.9 6.2 6.6 6.5C6.3 6.8 5.5 7.6 5.5 9.1C5.5 10.6 6.6 12.1 6.7 12.3C6.9 12.4 8.7 15.3 11.5 16.5C13.8 17.5 14.3 17.4 14.7 17.3C15.1 17.3 16.4 16.7 16.7 16.1C17 15.5 17 15 16.9 14.9C16.8 14.8 16.7 14.7 16.4 14.6C16.1 14.5 15.4 14.2 15.1 14.1"/>
         <path d="M12 2C6.5 2 2 6.5 2 12C2 13.8 2.5 15.4 3.3 16.8L2 22L7.4 20.7C8.8 21.5 10.3 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM12 20C10.5 20 9.1 19.6 7.8 18.8L7.5 18.7L4.2 19.5L5 16.3L4.9 16C4.3 14.8 4 13.5 4 12C4 7.6 7.6 4 12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20Z"/>
@@ -213,7 +276,6 @@
     <span class="wa-float-tooltip">Chat kami 💬</span>
 </a>
 
-<!-- Back to Top -->
 <button class="back-to-top" id="backToTop" title="Ke Atas">↑</button>
 
 <div class="modal" id="productModal">
@@ -241,34 +303,29 @@
     </div>
 </div>
 
-<!-- Checkout Form Modal -->
 <div class="modal" id="checkoutModal">
     <div class="modal-content modal-checkout">
         <button class="modal-close" id="checkoutClose">✖</button>
         <h2 class="modal-title">📝 Isi Data Pengiriman</h2>
         <p class="modal-subtitle">Data ini akan dikirim ke penjual via WhatsApp</p>
-        
+
         <form id="checkoutForm" class="checkout-form">
             <div class="form-row">
                 <label>Nama Penerima *</label>
                 <input type="text" id="cName" required placeholder="Contoh: Rina Ayu">
             </div>
-            
             <div class="form-row">
                 <label>No. WhatsApp *</label>
                 <input type="tel" id="cPhone" required placeholder="08123456789">
             </div>
-            
             <div class="form-row">
                 <label>Alamat Lengkap *</label>
                 <textarea id="cAddress" required rows="3" placeholder="Jalan, No. Rumah, Kelurahan, Kecamatan, Kota, Kode Pos"></textarea>
             </div>
-            
             <div class="form-row">
                 <label>Catatan (opsional)</label>
                 <textarea id="cNotes" rows="2" placeholder="Contoh: Tolong packing rapi, warna alternatif, dll"></textarea>
             </div>
-            
             <div class="checkout-summary">
                 <div class="checkout-summary-row">
                     <span>Total Item:</span>
@@ -279,7 +336,6 @@
                     <strong id="coTotal">Rp 0</strong>
                 </div>
             </div>
-            
             <div class="checkout-actions">
                 <button type="button" class="btn btn-secondary" id="checkoutCancel">Batal</button>
                 <button type="submit" class="btn btn-wa"><span>💬</span> Kirim ke WhatsApp</button>
