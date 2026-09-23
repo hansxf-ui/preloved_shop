@@ -71,10 +71,13 @@ const renderProducts = () => {
     grid.innerHTML = products.map((p, i) => {
         const discount = Math.round((1 - p.price / p.originalPrice) * 100);
         const isFav = favorites.includes(p.id);
+        const imageHTML = p.image
+            ? `<img src="${p.image}" alt="${p.name}" class="product-photo">`
+            : `<span class="product-emoji">${p.emoji}</span>`;
         return `
             <div class="product-card" style="animation-delay: ${i * 0.04}s" onclick="openProduct(${p.id})">
                 <div class="product-image" style="background: linear-gradient(135deg, ${p.color}40, ${p.color}80);">
-                    <span class="product-emoji">${p.emoji}</span>
+                    ${imageHTML}
                     <div class="product-badge">-${discount}%</div>
                     <button class="fav-toggle ${isFav ? 'active' : ''}"
                             onclick="event.stopPropagation(); toggleFav(${p.id}, this)">
