@@ -1,4 +1,8 @@
-const PRODUCTS = [
+// ═══════════════════════════════════════════
+//  PRODUK DEFAULT (dipakai kalau admin belum isi)
+// ═══════════════════════════════════════════
+
+const DEFAULT_PRODUCTS = [
     { id: 1, name: "Tas Vintage Pink Pastel", price: 125000, originalPrice: 350000, category: "tas", condition: "Mulus 9.5/10", emoji: "👜", color: "#FFB6D9", desc: "Tas vintage lucu dengan warna pink pastel. Kondisi masih sangat bagus, kulit tebal, zip aman. Cocok untuk jalan santai atau ke kampus.", seller: "Kak Ayu", stock: 1, rating: 5, sold: 12, tags: ["vintage", "pink", "tas"] },
     { id: 2, name: "Dress Floral Korea Style", price: 89000, originalPrice: 250000, category: "fashion", condition: "Mulus 9/10", emoji: "👗", color: "#C5B3FF", desc: "Dress bunga ala Korea, bahan adem, ukuran M. Cocok untuk hangout atau date.", seller: "Kak Rina", stock: 1, rating: 5, sold: 8, tags: ["dress", "floral", "korea"] },
     { id: 3, name: "Sneakers White Clean", price: 175000, originalPrice: 500000, category: "sepatu", condition: "Mulus 9/10", emoji: "👟", color: "#B3E5FC", desc: "Sneakers putih kekinian, baru dicuci bersih. Size 39. Nyaman untuk daily.", seller: "Kak Dita", stock: 1, rating: 4, sold: 15, tags: ["sneakers", "white", "sepatu"] },
@@ -12,6 +16,15 @@ const PRODUCTS = [
     { id: 11, name: "Sepatu Flat Mary Jane", price: 145000, originalPrice: 400000, category: "sepatu", condition: "Mulus 9/10", emoji: "🥿", color: "#FFB3BA", desc: "Flat shoes mary jane yang manis. Size 38. Nyaman untuk acara formal.", seller: "Kak Dewi", stock: 1, rating: 5, sold: 7, tags: ["flat", "mary jane"] },
     { id: 12, name: "Buku Puisi Cinta", price: 38000, originalPrice: 90000, category: "buku", condition: "Mulus 9/10", emoji: "📖", color: "#FFCCE5", desc: "Kumpulan puisi cinta yang manis. Cocok untuk hadiah atau koleksi.", seller: "Kak Rara", stock: 1, rating: 5, sold: 5, tags: ["puisi", "cinta"] }
 ];
+
+// ═══════════════════════════════════════════
+//  PRODUK AKTIF
+//  Kalau admin sudah isi produk → pakai itu
+//  Kalau belum → pakai default
+// ═══════════════════════════════════════════
+
+const STORED = localStorage.getItem('sugarcloset_products');
+const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
 
 const SHOP_INFO = {
     name: "Sugarcloset",
