@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🔧 Admin — Sugarcloset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+</head>
+<body class="admin-body">
+
+<header class="header admin-header">
+    <div class="container header-inner">
+        <a href="admin.html" class="logo">
+            <span class="logo-icon">🔧</span>
+            <span class="logo-text">Admin Panel</span>
+        </a>
+        <div class="header-actions">
+            <a href="index.html" class="icon-btn" title="Lihat Toko" style="text-decoration:none;">
+                <span>🏪</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<section class="admin-section">
+    <div class="container">
+
+        <div class="admin-title">
+            <h1>Panel Kelola Produk</h1>
+            <p>Kelola barang preloved dari sini — tanpa edit kode.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="admin-stats" id="adminStats">
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon">📦</div>
+                <div>
+                    <div class="admin-stat-label">Total Produk</div>
+                    <div class="admin-stat-value" id="statTotal">0</div>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon">💰</div>
+                <div>
+                    <div class="admin-stat-label">Total Nilai</div>
+                    <div class="admin-stat-value" id="statValue">Rp 0</div>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon">🏷️</div>
+                <div>
+                    <div class="admin-stat-label">Kategori</div>
+                    <div class="admin-stat-value" id="statCat">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="admin-toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="adminSearch" placeholder="Cari produk...">
+            </div>
+            <div class="admin-actions">
+                <button class="btn btn-primary" id="addProductBtn">➕ Tambah Produk</button>
+                <button class="btn btn-secondary" id="exportBtn">📥 Export</button>
+                <button class="btn btn-secondary" id="importBtn">📤 Import</button>
+                <button class="btn btn-secondary" id="resetBtn">🔄 Reset</button>
+                <input type="file" id="importFile" accept=".json" style="display:none;">
+            </div>
+        </div>
+
+        <!-- Product List -->
+        <div class="admin-grid" id="adminGrid"></div>
+
+        <div class="empty-state" id="adminEmpty" style="display:none;">
+            <div class="empty-icon">📭</div>
+            <h3>Belum ada produk</h3>
+            <p>Klik "Tambah Produk" untuk mulai.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Product Form Modal -->
+<div class="modal" id="productFormModal">
+    <div class="modal-content admin-modal">
+        <button class="modal-close" id="formClose">✖</button>
+        <h2 class="modal-title" id="formTitle">➕ Tambah Produk</h2>
+
+        <form id="productForm" class="admin-form">
+            <input type="hidden" id="fId">
+
+            <div class="form-row">
+                <label>Nama Produk *</label>
+                <input type="text" id="fName" required placeholder="Contoh: Tas Vintage Pink">
+            </div>
+
+            <div class="form-row-2">
+                <div>
+                    <label>Harga Jual (Rp) *</label>
+                    <input type="number" id="fPrice" required placeholder="125000">
+                </div>
+                <div>
+                    <label>Harga Asli (Rp) *</label>
+                    <input type="number" id="fOriginalPrice" required placeholder="350000">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div>
+                    <label>Kategori *</label>
+                    <select id="fCategory" required>
+                        <option value="fashion">👗 Fashion</option>
+                        <option value="tas">👜 Tas</option>
+                        <option value="sepatu">👠 Sepatu</option>
+                        <option value="aksesoris">💍 Aksesoris</option>
+                        <option value="buku">📚 Buku</option>
+                        <option value="elektronik">🎧 Elektronik</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Kondisi</label>
+                    <input type="text" id="fCondition" placeholder="Mulus 9/10">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div>
+                    <label>Emoji Produk *</label>
+                    <input type="text" id="fEmoji" required placeholder="👜" maxlength="4">
+                </div>
+                <div>
+                    <label>Warna Card *</label>
+                    <input type="color" id="fColor" value="#FFB6D9">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Deskripsi *</label>
+                <textarea id="fDesc" required rows="3" placeholder="Deskripsi singkat produk..."></textarea>
+            </div>
+
+            <div class="form-row-2">
+                <div>
+                    <label>Penjual</label>
+                    <input type="text" id="fSeller" placeholder="Kak Ayu">
+                </div>
+                <div>
+                    <label>Stok</label>
+                    <input type="number" id="fStock" value="1" min="1">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div>
+                    <label>Rating (1-5)</label>
+                    <input type="number" id="fRating" value="5" min="1" max="5">
+                </div>
+                <div>
+                    <label>Terjual</label>
+                    <input type="number" id="fSold" value="0" min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Tags (pisah dengan koma)</label>
+                <input type="text" id="fTags" placeholder="vintage, pink, tas">
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Batal</button>
+                <button type="submit" class="btn btn-primary">💾 Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>
