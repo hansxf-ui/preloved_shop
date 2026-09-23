@@ -320,3 +320,73 @@
     .admin-grid { grid-template-columns: 1fr; }
     .form-row-2 { grid-template-columns: 1fr; }
 }
+
+/* ═══ Fix Admin Search Input ═══ */
+.admin-toolbar .search-box {
+    position: relative;
+    width: 100%;
+}
+
+.admin-toolbar .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.6;
+}
+
+.admin-toolbar #adminSearch {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 2px solid var(--pink-light);
+    border-radius: var(--radius-xl);
+    background: var(--cream);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.admin-toolbar #adminSearch:focus {
+    border-color: var(--pink);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(255, 182, 217, 0.2);
+}
+
+.admin-toolbar #adminSearch::placeholder {
+    color: var(--text-mute);
+    font-weight: 500;
+}
+
+/* ═══ Fix Admin Actions Layout ═══ */
+.admin-actions {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 6px;
+    width: 100%;
+}
+
+.admin-actions .btn {
+    padding: 10px 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+    .admin-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .admin-actions .btn:first-child {
+        grid-column: 1 / -1;
+    }
+}
