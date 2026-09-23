@@ -1763,3 +1763,34 @@ body {
         padding: 12px;
     }
 }
+
+/* ═══ FIX Hero Card SVG — override svg-icon ═══ */
+
+.hero-illustration .hero-card.svg-icon {
+    width: auto !important;
+    height: auto !important;
+    min-width: 70px;
+    min-height: 70px;
+    padding: 16px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-illustration .hero-card.svg-icon svg {
+    width: 48px !important;
+    height: 48px !important;
+    display: block;
+}
+
+@media (max-width: 720px) {
+    .hero-illustration .hero-card.svg-icon {
+        min-width: 54px;
+        min-height: 54px;
+        padding: 10px;
+    }
+    .hero-illustration .hero-card.svg-icon svg {
+        width: 34px !important;
+        height: 34px !important;
+    }
+}
