@@ -221,12 +221,31 @@ const renderCart = () => {
                 <div class="cart-item-img" style="background: ${p.color}60;">${p.emoji}</div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${p.name}</div>
-                    <div class="cart-item-price">${formatRupiah(p.price)} × ${qty}</div>
+                    <div class="cart-item-price">${formatRupiah(p.price)}</div>
+                </div>
+                <div class="qty-selector">
+                    <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+                    <span class="qty-value">${qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
                 </div>
                 <button class="cart-item-remove" onclick="removeFromCart(${p.id})">🗑️</button>
             </div>`;
     }).join('');
     t.textContent = formatRupiah(total);
+};
+
+// ─── Qty Changer ───
+const changeQty = (id, delta) => {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty = (item.qty || 1) + delta;
+    if (item.qty < 1) {
+        removeFromCart(id);
+        return;
+    }
+    saveCart();
+    updateBadges();
+    renderCart();
 };
 
 // ─── Checkout ───
