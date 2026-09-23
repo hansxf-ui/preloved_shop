@@ -512,11 +512,58 @@ window.closeModal = closeModal;
 window.shareProduct = shareProduct;
 
 // ─── Init ───
+// ─── Render Testimoni ───
+const renderTestimonials = () => {
+    const grid = document.getElementById('testimonialGrid');
+    if (!grid || typeof TESTIMONIALS === 'undefined') return;
+
+    grid.innerHTML = TESTIMONIALS.map((t, i) => {
+        const stars = '⭐'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+        return `
+            <div class="testimonial-card" style="animation-delay: ${i * 0.06}s">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar" style="background: ${t.color}60;">
+                        ${t.avatar}
+                    </div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">${t.name}</div>
+                        <div class="testimonial-date">${t.date}</div>
+                    </div>
+                </div>
+                <div class="testimonial-stars">${stars}</div>
+                <p class="testimonial-text">"${t.text}"</p>
+                <div class="testimonial-product">📦 ${t.product}</div>
+            </div>
+        `;
+    }).join('');
+};
+
+// ─── Render FAQ ───
+const renderFAQ = () => {
+    const list = document.getElementById('faqList');
+    if (!list || typeof FAQS === 'undefined') return;
+
+    list.innerHTML = FAQS.map((f, i) => `
+        <details class="faq-item" ${i === 0 ? 'open' : ''}>
+            <summary class="faq-question">
+                <span>${f.q}</span>
+                <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer">
+                <p>${f.a}</p>
+            </div>
+        </details>
+    `).join('');
+};
+
+// ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
     initFloatingHearts();
     initEvents();
     initBackToTop();
     updateBadges();
     renderProducts();
-    console.log('🎀 Sugarcloset loaded (Paket B)');
+    renderTestimonials();
+    renderFAQ();
+    console.log('🎀 Sugarcloset loaded (Paket C)');
 });
