@@ -15,14 +15,14 @@
 </head>
 <body>
 
-    <!-- Floating Hearts Background -->
+    <!-- Floating Decorative Icons -->
     <div class="floating-hearts" id="floatingHearts"></div>
 
     <!-- Header -->
     <header class="header">
         <div class="container header-inner">
             <a href="#" class="logo">
-                <span class="logo-icon">🎀</span>
+                <span class="logo-icon" id="logoIcon"></span>
                 <span class="logo-text">Sugarcloset</span>
             </a>
 
@@ -35,15 +35,15 @@
 
             <div class="header-actions">
                 <button class="icon-btn" id="favBtn" title="Favorit">
-                    <span>💖</span>
+                    <span class="svg-icon" data-icon="heart"></span>
                     <span class="badge" id="favCount">0</span>
                 </button>
                 <button class="icon-btn" id="cartBtn" title="Keranjang">
-                    <span>🛒</span>
+                    <span class="svg-icon" data-icon="cart"></span>
                     <span class="badge" id="cartCount">0</span>
                 </button>
                 <button class="icon-btn menu-btn" id="menuBtn" title="Menu">
-                    <span>☰</span>
+                    <span class="svg-icon" data-icon="menu"></span>
                 </button>
             </div>
         </div>
@@ -53,7 +53,10 @@
     <section class="hero" id="home">
         <div class="container hero-inner">
             <div class="hero-content">
-                <span class="hero-badge">✨ Barang Preloved Berkualitas ✨</span>
+                <span class="hero-badge">
+                    <span class="svg-icon" data-icon="sparkle"></span>
+                    Barang Preloved Berkualitas
+                </span>
                 <h1 class="hero-title">
                     Temukan Barang<br>
                     <span class="highlight">Menggemaskan</span><br>
@@ -65,21 +68,21 @@
                 </p>
                 <div class="hero-actions">
                     <a href="#products" class="btn btn-primary">
-                        <span>🛍️</span> Mulai Belanja
+                        <span class="svg-icon" data-icon="bag"></span> Mulai Belanja
                     </a>
                     <a href="#about" class="btn btn-secondary">
-                        <span>💌</span> Cerita Kami
+                        <span class="svg-icon" data-icon="heart"></span> Cerita Kami
                     </a>
                 </div>
             </div>
 
             <div class="hero-illustration">
-                <div class="hero-card c1">👗<span>Fashion</span></div>
-                <div class="hero-card c2">👜<span>Tas</span></div>
-                <div class="hero-card c3">👠<span>Sepatu</span></div>
-                <div class="hero-card c4">💍<span>Aksesoris</span></div>
-                <div class="hero-card c5">📚<span>Buku</span></div>
-                <div class="hero-card c6">🎧<span>Elektronik</span></div>
+                <div class="hero-card c1" data-icon="dress"></div>
+                <div class="hero-card c2" data-icon="bag"></div>
+                <div class="hero-card c3" data-icon="shoes"></div>
+                <div class="hero-card c4" data-icon="ring"></div>
+                <div class="hero-card c5" data-icon="book"></div>
+                <div class="hero-card c6" data-icon="headphones"></div>
                 <div class="hero-blob"></div>
             </div>
         </div>
@@ -88,16 +91,16 @@
     <!-- Marquee -->
     <div class="marquee">
         <div class="marquee-track">
-            <span>🎀 Kualitas Terjamin</span>
-            <span>✨ Harga Ramah</span>
-            <span>💖 Packing Cantik</span>
-            <span>🌈 Ramah Lingkungan</span>
-            <span>🎁 Bonus Surprise</span>
-            <span>🎀 Kualitas Terjamin</span>
-            <span>✨ Harga Ramah</span>
-            <span>💖 Packing Cantik</span>
-            <span>🌈 Ramah Lingkungan</span>
-            <span>🎁 Bonus Surprise</span>
+            <span><span class="svg-icon" data-icon="heart"></span> Kualitas Terjamin</span>
+            <span><span class="svg-icon" data-icon="sparkle"></span> Harga Ramah</span>
+            <span><span class="svg-icon" data-icon="ribbon"></span> Packing Cantik</span>
+            <span><span class="svg-icon" data-icon="flower"></span> Ramah Lingkungan</span>
+            <span><span class="svg-icon" data-icon="star"></span> Bonus Surprise</span>
+            <span><span class="svg-icon" data-icon="heart"></span> Kualitas Terjamin</span>
+            <span><span class="svg-icon" data-icon="sparkle"></span> Harga Ramah</span>
+            <span><span class="svg-icon" data-icon="ribbon"></span> Packing Cantik</span>
+            <span><span class="svg-icon" data-icon="flower"></span> Ramah Lingkungan</span>
+            <span><span class="svg-icon" data-icon="star"></span> Bonus Surprise</span>
         </div>
     </div>
 
@@ -105,26 +108,29 @@
     <section class="products" id="products">
         <div class="container">
             <div class="section-head">
-                <span class="section-badge">🌟 Koleksi Pilihan</span>
+                <span class="section-badge">
+                    <span class="svg-icon" data-icon="star"></span>
+                    Koleksi Pilihan
+                </span>
                 <h2 class="section-title">Barang Cantik yang Menanti</h2>
                 <p class="section-desc">Setiap barang sudah dicek kualitasnya. Kalau tidak cantik, tidak kami jual.</p>
             </div>
 
-            <!-- Search & Filter -->
+            <!-- Filter -->
             <div class="filter-bar">
                 <div class="search-box">
-                    <span class="search-icon">🔍</span>
+                    <span class="search-icon svg-icon" data-icon="search"></span>
                     <input type="text" id="searchInput" placeholder="Cari tas, sepatu, baju...">
                 </div>
 
                 <div class="categories" id="categories">
                     <button class="cat-btn active" data-cat="all">Semua</button>
-                    <button class="cat-btn" data-cat="fashion">👗 Fashion</button>
-                    <button class="cat-btn" data-cat="tas">👜 Tas</button>
-                    <button class="cat-btn" data-cat="sepatu">👠 Sepatu</button>
-                    <button class="cat-btn" data-cat="aksesoris">💍 Aksesoris</button>
-                    <button class="cat-btn" data-cat="buku">📚 Buku</button>
-                    <button class="cat-btn" data-cat="elektronik">🎧 Elektronik</button>
+                    <button class="cat-btn" data-cat="fashion"><span class="svg-icon" data-icon="dress"></span> Fashion</button>
+                    <button class="cat-btn" data-cat="tas"><span class="svg-icon" data-icon="bag"></span> Tas</button>
+                    <button class="cat-btn" data-cat="sepatu"><span class="svg-icon" data-icon="shoes"></span> Sepatu</button>
+                    <button class="cat-btn" data-cat="aksesoris"><span class="svg-icon" data-icon="ring"></span> Aksesoris</button>
+                    <button class="cat-btn" data-cat="buku"><span class="svg-icon" data-icon="book"></span> Buku</button>
+                    <button class="cat-btn" data-cat="elektronik"><span class="svg-icon" data-icon="headphones"></span> Elektronik</button>
                 </div>
 
                 <div class="sort-box">
@@ -137,54 +143,51 @@
                 </div>
             </div>
 
-            <!-- Product Grid -->
             <div class="product-grid" id="productGrid"></div>
 
-            <!-- Empty State -->
             <div class="empty-state" id="emptyState" style="display:none;">
-                <div class="empty-icon">🥺</div>
+                <div class="empty-icon svg-icon" data-icon="heartOutline"></div>
                 <h3>Tidak ada barang ditemukan</h3>
                 <p>Coba kata kunci lain atau pilih kategori berbeda ya~</p>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About -->
     <section class="about" id="about">
         <div class="container about-inner">
             <div class="about-card">
-                <div class="about-icon">🌸</div>
+                <div class="about-icon svg-icon" data-icon="flower"></div>
                 <h3>Kenapa Preloved?</h3>
                 <p>Karena barang cantik tidak harus baru. Dan barang lama tidak harus dibuang. Kami percaya setiap barang punya cerita.</p>
             </div>
             <div class="about-card">
-                <div class="about-icon">💝</div>
+                <div class="about-icon svg-icon" data-icon="heart"></div>
                 <h3>Barang Terkurasi</h3>
                 <p>Semua barang kami dicek satu per satu. Kalau ada cacat, kami foto dan jujur sebutkan. Tanpa drama.</p>
             </div>
             <div class="about-card">
-                <div class="about-icon">🌿</div>
+                <div class="about-icon svg-icon" data-icon="rainbow"></div>
                 <h3>Ramah Bumi</h3>
                 <p>Dengan beli preloved, kau bantu kurangi limbah fashion. Gaya tetap oke, bumi tetap senyum.</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact -->
     <section class="contact" id="contact">
         <div class="container contact-inner">
-            <div class="contact-emoji">💌</div>
+            <div class="contact-emoji svg-icon" data-icon="ribbon"></div>
             <h2 class="contact-title">Ada Pertanyaan? Aku Siap Bantu!</h2>
             <p class="contact-desc">Chat aku langsung, aku biasanya balas dalam 5 menit. Jangan malu ya~</p>
-            <a href="https://wa.me/6281234567890?text=Halo%20kak%2C%20saya%20mau%20tanya%20tentang%20barang%20preloved%20nya%20%F0%9F%8C%B8" 
+            <a href="https://wa.me/6281234567890?text=Halo%20kak%2C%20saya%20mau%20tanya" 
                target="_blank" class="btn btn-wa">
-                <span>💬</span> Chat via WhatsApp
+                <span class="svg-icon" data-icon="whatsapp"></span> Chat via WhatsApp
             </a>
             <div class="socials">
-                <a href="#" title="Instagram" class="social">📷</a>
-                <a href="#" title="TikTok" class="social">🎵</a>
-                <a href="#" title="Shopee" class="social">🛒</a>
-                <a href="#" title="Tokopedia" class="social">🛍️</a>
+                <a href="#" title="Instagram" class="social svg-icon" data-icon="instagram"></a>
+                <a href="#" title="TikTok" class="social svg-icon" data-icon="tiktok"></a>
+                <a href="#" title="Shopee" class="social svg-icon" data-icon="shopee"></a>
             </div>
         </div>
     </section>
@@ -193,7 +196,7 @@
     <footer class="footer">
         <div class="container footer-inner">
             <div class="footer-brand">
-                <span class="logo-icon">🎀</span>
+                <span class="logo-icon svg-icon" data-icon="ribbon"></span>
                 <span class="logo-text">Sugarcloset</span>
                 <p>Preloved dengan cinta, dikemas dengan sayang.</p>
             </div>
@@ -203,47 +206,55 @@
                 <a href="#contact">Kontak</a>
             </div>
             <div class="footer-copy">
-                <p>© 2026 Sugarcloset · Dibuat dengan 💖</p>
+                <p>© 2026 Sugarcloset · Dibuat dengan <span class="svg-icon inline-heart" data-icon="heart"></span></p>
             </div>
         </div>
     </footer>
 
-    <!-- Product Detail Modal -->
+    <!-- Modals -->
     <div class="modal" id="productModal">
         <div class="modal-content">
-            <button class="modal-close" id="modalClose">✖</button>
+            <button class="modal-close" id="modalClose">
+                <span class="svg-icon" data-icon="close"></span>
+            </button>
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
-    <!-- Cart Modal -->
     <div class="modal" id="cartModal">
         <div class="modal-content modal-cart">
-            <button class="modal-close" id="cartClose">✖</button>
-            <h2 class="modal-title">🛒 Keranjang Belanja</h2>
+            <button class="modal-close" id="cartClose">
+                <span class="svg-icon" data-icon="close"></span>
+            </button>
+            <h2 class="modal-title">
+                <span class="svg-icon" data-icon="cart"></span> Keranjang Belanja
+            </h2>
             <div id="cartItems" class="cart-items"></div>
             <div class="cart-total">
                 <span>Total:</span>
                 <strong id="cartTotal">Rp 0</strong>
             </div>
             <button class="btn btn-primary btn-full" id="checkoutBtn">
-                <span>💌</span> Checkout via WhatsApp
+                <span class="svg-icon" data-icon="whatsapp"></span> Checkout via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- Favorite Modal -->
     <div class="modal" id="favModal">
         <div class="modal-content modal-cart">
-            <button class="modal-close" id="favClose">✖</button>
-            <h2 class="modal-title">💖 Favorit Kamu</h2>
+            <button class="modal-close" id="favClose">
+                <span class="svg-icon" data-icon="close"></span>
+            </button>
+            <h2 class="modal-title">
+                <span class="svg-icon" data-icon="heart"></span> Favorit Kamu
+            </h2>
             <div id="favItems" class="cart-items"></div>
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <script src="icons.js"></script>
     <script src="products.js"></script>
     <script src="script.js"></script>
 </body>
