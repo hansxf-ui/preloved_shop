@@ -1166,25 +1166,49 @@ body {
 
 /* ═══ Toast ═══ */
 .toast {
+/* ═══════════════════════════════════════════
+   TOAST — Cute Style
+   ═══════════════════════════════════════════ */
+
+.toast {
     position: fixed;
-    bottom: 30px;
+    bottom: 24px;
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--text);
+    transform: translateX(-50%) translateY(120px) scale(0.9);
+    background: linear-gradient(135deg, #FFB6D9 0%, #C5B3FF 100%);
     color: white;
-    padding: 14px 28px;
-    border-radius: var(--radius-xl);
-    font-weight: 600;
+    padding: 14px 24px 14px 20px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
     font-size: 14px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 
+        0 10px 30px rgba(255, 143, 184, 0.4),
+        0 0 0 3px rgba(255, 255, 255, 0.9) inset;
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     z-index: 2000;
     pointer-events: none;
     max-width: 90vw;
     text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.2px;
 }
 
+.toast.show {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* Toast dengan emoji di depan */
+.toast::before {
+    content: '';
+    font-size: 18px;
+    flex-shrink: 0;
+}
 .toast.show {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
