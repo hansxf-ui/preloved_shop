@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════
-//  PRODUK DEFAULT (dipakai kalau admin belum isi)
+//  PRODUK DEFAULT
 // ═══════════════════════════════════════════
 
 const DEFAULT_PRODUCTS = [
@@ -17,12 +17,6 @@ const DEFAULT_PRODUCTS = [
     { id: 12, name: "Buku Puisi Cinta", price: 38000, originalPrice: 90000, category: "buku", condition: "Mulus 9/10", emoji: "📖", color: "#FFCCE5", desc: "Kumpulan puisi cinta yang manis. Cocok untuk hadiah atau koleksi.", seller: "Kak Rara", stock: 1, rating: 5, sold: 5, tags: ["puisi", "cinta"] }
 ];
 
-// ═══════════════════════════════════════════
-//  PRODUK AKTIF
-//  Kalau admin sudah isi produk → pakai itu
-//  Kalau belum → pakai default
-// ═══════════════════════════════════════════
-
 const STORED = localStorage.getItem('sugarcloset_products');
 const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
 
@@ -32,3 +26,100 @@ const SHOP_INFO = {
     instagram: "@sugarcloset",
     tiktok: "@sugarcloset"
 };
+
+// ═══════════════════════════════════════════
+//  TESTIMONI PEMBELI
+//  Silakan tambah/edit testimoni di sini
+// ═══════════════════════════════════════════
+
+const TESTIMONIALS = [
+    {
+        name: "Rina A.",
+        avatar: "🌸",
+        color: "#FFB6D9",
+        rating: 5,
+        text: "Barangnya persis seperti foto, malah lebih cantik! Packing rapi banget, ada bonus stiker lucu. Recommended banget kakaknya 🥰",
+        date: "2 minggu lalu",
+        product: "Tas Vintage Pink"
+    },
+    {
+        name: "Sinta D.",
+        avatar: "💕",
+        color: "#C5B3FF",
+        rating: 5,
+        text: "Fast respon, ramah, dan sabar jawab pertanyaan. Dressnya masih mulus banget kayak baru. Pasti repeat order!",
+        date: "1 bulan lalu",
+        product: "Dress Floral Korea"
+    },
+    {
+        name: "Mia K.",
+        avatar: "✨",
+        color: "#B3FFD9",
+        rating: 5,
+        text: "Udah langganan di sini. Harga ramah, kualitas oke. Kemarin beli headphone, suaranya jernih banget. Thank you kak!",
+        date: "3 minggu lalu",
+        product: "Headphone Cute Edition"
+    },
+    {
+        name: "Dewi P.",
+        avatar: "🌷",
+        color: "#FFC9A8",
+        rating: 4,
+        text: "Sepatunya nyaman banget dipakai. Cuma agak lecet dikit di bagian belakang, tapi udah diinfokan dari awal jadi ga masalah.",
+        date: "1 minggu lalu",
+        product: "Sepatu Flat Mary Jane"
+    },
+    {
+        name: "Nana R.",
+        avatar: "🦋",
+        color: "#FFE9B3",
+        rating: 5,
+        text: "Pelayanan top! Dikirim hari yang sama, sampai dengan aman. Rok plisketnya cantik banget sesuai deskripsi 💖",
+        date: "5 hari lalu",
+        product: "Rok Plisket Peach"
+    },
+    {
+        name: "Lily H.",
+        avatar: "🌈",
+        color: "#FFD9F2",
+        rating: 5,
+        text: "Choker bunganya manis banget, cocok dipake daily. Harganya juga ramah untuk kantong pelajar. Makasih ya kak!",
+        date: "1 bulan lalu",
+        product: "Kalung Choker Bunga"
+    }
+];
+
+// ═══════════════════════════════════════════
+//  FAQ (Pertanyaan Umum)
+// ═══════════════════════════════════════════
+
+const FAQS = [
+    {
+        q: "Apakah barangnya masih bagus?",
+        a: "Semua barang kami dicek satu per satu sebelum dijual. Kondisi jujur kami sebutkan di deskripsi produk. Kalau ada cacat, kami foto dan jelaskan apa adanya — tanpa drama."
+    },
+    {
+        q: "Bagaimana cara pesan?",
+        a: "Gampang banget! 1) Pilih produk yang kau suka, 2) Tambahkan ke keranjang, 3) Klik Checkout, 4) Isi data pengiriman, 5) Kirim ke WhatsApp kami. Kami akan konfirmasi ketersediaan dan total pembayaran."
+    },
+    {
+        q: "Metode pembayaran apa saja?",
+        a: "Kami menerima transfer bank (BCA, Mandiri, BNI, BRI), e-wallet (GoPay, OVO, DANA, ShopeePay), dan COD untuk area tertentu. Detail akan dikirim via WhatsApp setelah pesanan dikonfirmasi."
+    },
+    {
+        q: "Berapa lama pengiriman?",
+        a: "Untuk dalam kota: 1-2 hari. Luar kota: 2-5 hari kerja. Kami kirim via JNE, J&T, SiCepat, atau AnterAja — kau bisa pilih sesuai preferensi. Kami kirim hari yang sama kalau order sebelum jam 3 sore."
+    },
+    {
+        q: "Apakah bisa retur/tukar?",
+        a: "Bisa! Kalau barang yang diterima jauh berbeda dari deskripsi, kau bisa ajukan retur dalam 1x24 jam setelah barang diterima. Kami akan ganti atau refund penuh. Kami ingin kau puas!"
+    },
+    {
+        q: "Ada bonus atau diskon?",
+        a: "Setiap pembelian dapat free stiker lucu dan kadang bonus surprise kecil. Untuk pembelian 3 item atau lebih, ada diskon spesial. Follow Instagram kami untuk promo terbaru!"
+    },
+    {
+        q: "Barang bekas atau baru?",
+        a: "Kami jual preloved (bekas) dan juga barang baru stok lama. Semua kondisi jujur kami sebutkan di deskripsi. Preloved bukan berarti jelek — banyak barang preloved yang masih sangat bagus dengan harga jauh lebih ramah."
+    }
+];
