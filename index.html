@@ -200,6 +200,22 @@
     </div>
 </footer>
 
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/6281234567890?text=Halo%20kak%2C%20saya%20mau%20tanya" 
+   target="_blank" 
+   class="wa-float" 
+   id="waFloat"
+   title="Chat WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.5 14.4C17.2 14.2 15.7 13.5 15.4 13.4C15.1 13.3 14.9 13.2 14.7 13.5C14.5 13.8 14 14.4 13.8 14.6C13.6 14.8 13.5 14.8 13.2 14.7C12.9 14.5 11.9 14.2 10.7 13.1C9.8 12.3 9.2 11.3 9 11C8.9 10.7 9 10.6 9.2 10.4C9.3 10.3 9.5 10 9.6 9.9C9.7 9.7 9.8 9.6 9.9 9.4C10 9.2 10 9 9.9 8.8C9.8 8.7 9.2 7.2 8.9 6.6C8.7 6 8.4 6.1 8.2 6.1C8 6.1 7.8 6.1 7.5 6.1C7.3 6.1 6.9 6.2 6.6 6.5C6.3 6.8 5.5 7.6 5.5 9.1C5.5 10.6 6.6 12.1 6.7 12.3C6.9 12.4 8.7 15.3 11.5 16.5C13.8 17.5 14.3 17.4 14.7 17.3C15.1 17.3 16.4 16.7 16.7 16.1C17 15.5 17 15 16.9 14.9C16.8 14.8 16.7 14.7 16.4 14.6C16.1 14.5 15.4 14.2 15.1 14.1"/>
+        <path d="M12 2C6.5 2 2 6.5 2 12C2 13.8 2.5 15.4 3.3 16.8L2 22L7.4 20.7C8.8 21.5 10.3 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM12 20C10.5 20 9.1 19.6 7.8 18.8L7.5 18.7L4.2 19.5L5 16.3L4.9 16C4.3 14.8 4 13.5 4 12C4 7.6 7.6 4 12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20Z"/>
+    </svg>
+    <span class="wa-float-tooltip">Chat kami 💬</span>
+</a>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" title="Ke Atas">↑</button>
+
 <div class="modal" id="productModal">
     <div class="modal-content">
         <button class="modal-close" id="modalClose">✖</button>
@@ -213,7 +229,7 @@
         <h2 class="modal-title">🛒 Keranjang Belanja</h2>
         <div id="cartItems" class="cart-items"></div>
         <div class="cart-total"><span>Total:</span><strong id="cartTotal">Rp 0</strong></div>
-        <button class="btn btn-primary btn-full" id="checkoutBtn"><span>💌</span> Checkout via WhatsApp</button>
+        <button class="btn btn-primary btn-full" id="checkoutBtn"><span>💌</span> Checkout Sekarang</button>
     </div>
 </div>
 
@@ -222,6 +238,53 @@
         <button class="modal-close" id="favClose">✖</button>
         <h2 class="modal-title">💖 Favorit Kamu</h2>
         <div id="favItems" class="cart-items"></div>
+    </div>
+</div>
+
+<!-- Checkout Form Modal -->
+<div class="modal" id="checkoutModal">
+    <div class="modal-content modal-checkout">
+        <button class="modal-close" id="checkoutClose">✖</button>
+        <h2 class="modal-title">📝 Isi Data Pengiriman</h2>
+        <p class="modal-subtitle">Data ini akan dikirim ke penjual via WhatsApp</p>
+        
+        <form id="checkoutForm" class="checkout-form">
+            <div class="form-row">
+                <label>Nama Penerima *</label>
+                <input type="text" id="cName" required placeholder="Contoh: Rina Ayu">
+            </div>
+            
+            <div class="form-row">
+                <label>No. WhatsApp *</label>
+                <input type="tel" id="cPhone" required placeholder="08123456789">
+            </div>
+            
+            <div class="form-row">
+                <label>Alamat Lengkap *</label>
+                <textarea id="cAddress" required rows="3" placeholder="Jalan, No. Rumah, Kelurahan, Kecamatan, Kota, Kode Pos"></textarea>
+            </div>
+            
+            <div class="form-row">
+                <label>Catatan (opsional)</label>
+                <textarea id="cNotes" rows="2" placeholder="Contoh: Tolong packing rapi, warna alternatif, dll"></textarea>
+            </div>
+            
+            <div class="checkout-summary">
+                <div class="checkout-summary-row">
+                    <span>Total Item:</span>
+                    <strong id="coItems">0</strong>
+                </div>
+                <div class="checkout-summary-row">
+                    <span>Total Bayar:</span>
+                    <strong id="coTotal">Rp 0</strong>
+                </div>
+            </div>
+            
+            <div class="checkout-actions">
+                <button type="button" class="btn btn-secondary" id="checkoutCancel">Batal</button>
+                <button type="submit" class="btn btn-wa"><span>💬</span> Kirim ke WhatsApp</button>
+            </div>
+        </form>
     </div>
 </div>
 
