@@ -1176,3 +1176,51 @@ img, svg { max-width: 100%; height: auto; }
 ::-webkit-scrollbar-track { background: var(--cream); }
 ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 6px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--pink-dark); }
+
+/* ═══ Qty Selector di Keranjang ═══ */
+.qty-selector {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--pink-light);
+    border-radius: var(--radius-xl);
+    padding: 3px;
+    flex-shrink: 0;
+}
+
+.qty-btn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: var(--white);
+    color: var(--pink-dark);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.2s;
+    line-height: 1;
+    font-family: var(--font-body);
+}
+
+.qty-btn:hover {
+    background: var(--pink-dark);
+    color: white;
+    transform: scale(1.1);
+}
+
+.qty-btn:active {
+    transform: scale(0.95);
+}
+
+.qty-value {
+    min-width: 22px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--pink-dark);
+}
