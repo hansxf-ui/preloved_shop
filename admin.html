@@ -35,7 +35,6 @@
             <p>Kelola barang preloved dari sini — tanpa edit kode.</p>
         </div>
 
-        <!-- Stats -->
         <div class="admin-stats" id="adminStats">
             <div class="admin-stat-card">
                 <div class="admin-stat-icon">📦</div>
@@ -60,14 +59,13 @@
             </div>
         </div>
 
-        <!-- Toolbar -->
         <div class="admin-toolbar">
             <div class="search-box">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="adminSearch" placeholder="Cari produk...">
             </div>
             <div class="admin-actions">
-                <button class="btn btn-primary" id="addProductBtn">➕ Tambah Produk</button>
+                <button class="btn btn-primary" id="addProductBtn">➕ Tambah</button>
                 <button class="btn btn-secondary" id="exportBtn">📥 Export</button>
                 <button class="btn btn-secondary" id="importBtn">📤 Import</button>
                 <button class="btn btn-secondary" id="resetBtn">🔄 Reset</button>
@@ -75,13 +73,12 @@
             </div>
         </div>
 
-        <!-- Product List -->
         <div class="admin-grid" id="adminGrid"></div>
 
         <div class="empty-state" id="adminEmpty" style="display:none;">
             <div class="empty-icon">📭</div>
             <h3>Belum ada produk</h3>
-            <p>Klik "Tambah Produk" untuk mulai.</p>
+            <p>Klik "Tambah" untuk mulai.</p>
         </div>
 
     </div>
@@ -95,6 +92,20 @@
 
         <form id="productForm" class="admin-form">
             <input type="hidden" id="fId">
+            <input type="hidden" id="fImageData">
+
+            <!-- FOTO PRODUK -->
+            <div class="form-row">
+                <label>📸 Foto Produk</label>
+                <div class="image-upload-box" id="imageUploadBox">
+                    <div class="image-preview" id="imagePreview">
+                        <span class="image-preview-placeholder">📷 Ketuk untuk pilih foto</span>
+                    </div>
+                    <input type="file" id="fImageFile" accept="image/*" style="display:none;">
+                    <button type="button" class="image-remove-btn" id="imageRemoveBtn" style="display:none;">✖</button>
+                </div>
+                <small class="form-hint">Foto otomatis dikompres · Max 5MB</small>
+            </div>
 
             <div class="form-row">
                 <label>Nama Produk *</label>
@@ -132,7 +143,7 @@
 
             <div class="form-row-2">
                 <div>
-                    <label>Emoji Produk *</label>
+                    <label>Emoji Cadangan *</label>
                     <input type="text" id="fEmoji" required placeholder="👜" maxlength="4">
                 </div>
                 <div>
@@ -140,6 +151,7 @@
                     <input type="color" id="fColor" value="#FFB6D9">
                 </div>
             </div>
+            <small class="form-hint" style="margin-top:-6px; padding-left:4px;">Emoji dipakai kalau foto belum di-upload</small>
 
             <div class="form-row">
                 <label>Deskripsi *</label>
