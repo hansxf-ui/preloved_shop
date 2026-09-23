@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   SUGARCLOSET — Script Final
+   SUGARCLOSET — Script Final + Qty Selector
    ═══════════════════════════════════════════ */
 
 let currentCategory = 'all';
@@ -193,6 +193,19 @@ const removeFromCart = (id) => {
     showToast('🗑️ Dihapus dari keranjang');
 };
 
+const changeQty = (id, delta) => {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty = (item.qty || 1) + delta;
+    if (item.qty < 1) {
+        removeFromCart(id);
+        return;
+    }
+    saveCart();
+    updateBadges();
+    renderCart();
+};
+
 const saveCart = () => localStorage.setItem('sugarcloset_cart', JSON.stringify(cart));
 
 const renderCart = () => {
@@ -221,7 +234,7 @@ const renderCart = () => {
                 <div class="cart-item-img" style="background: ${p.color}60;">${p.emoji}</div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${p.name}</div>
-                    <div class="cart-item-price">${formatRupiah(p.price)}</div>
+                    <div class="cart-item-price">${formatRupiah(p.price)} × ${qty}</div>
                 </div>
                 <div class="qty-selector">
                     <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
@@ -232,20 +245,6 @@ const renderCart = () => {
             </div>`;
     }).join('');
     t.textContent = formatRupiah(total);
-};
-
-// ─── Qty Changer ───
-const changeQty = (id, delta) => {
-    const item = cart.find(x => x.id === id);
-    if (!item) return;
-    item.qty = (item.qty || 1) + delta;
-    if (item.qty < 1) {
-        removeFromCart(id);
-        return;
-    }
-    saveCart();
-    updateBadges();
-    renderCart();
 };
 
 // ─── Checkout ───
@@ -320,25 +319,27 @@ const initEvents = () => {
     const sortBtn = document.getElementById('sortBtn');
     const sortLabel = document.getElementById('sortLabel');
 
-    sortBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        sortWrapper.classList.toggle('open');
-    });
-
-    document.querySelectorAll('.custom-select-option').forEach(opt => {
-        opt.addEventListener('click', () => {
-            document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            currentSort = opt.dataset.value;
-            sortLabel.textContent = opt.textContent;
-            sortWrapper.classList.remove('open');
-            renderProducts();
+    if (sortBtn) {
+        sortBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sortWrapper.classList.toggle('open');
         });
-    });
 
-    document.addEventListener('click', (e) => {
-        if (!sortWrapper.contains(e.target)) sortWrapper.classList.remove('open');
-    });
+        document.querySelectorAll('.custom-select-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                currentSort = opt.dataset.value;
+                sortLabel.textContent = opt.textContent;
+                sortWrapper.classList.remove('open');
+                renderProducts();
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sortWrapper.contains(e.target)) sortWrapper.classList.remove('open');
+        });
+    }
 
     document.getElementById('cartBtn').addEventListener('click', () => {
         renderCart();
@@ -372,6 +373,15 @@ const initEvents = () => {
         l.addEventListener('click', () => document.querySelector('.nav').classList.remove('open'));
     });
 };
+
+// ─── Bikin fungsi bisa dipanggil dari HTML ───
+window.changeQty = changeQty;
+window.removeFromCart = removeFromCart;
+window.addToCart = addToCart;
+window.toggleFav = toggleFav;
+window.toggleFavFromModal = toggleFavFromModal;
+window.openProduct = openProduct;
+window.closeModal = closeModal;
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
