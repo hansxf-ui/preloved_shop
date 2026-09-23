@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   SUGARCLOSET — Script Final + Qty Selector
+   SUGARCLOSET — Script Final (Paket B)
    ═══════════════════════════════════════════ */
 
 let currentCategory = 'all';
@@ -110,9 +110,9 @@ const openProduct = (id) => {
     const discount = Math.round((1 - p.price / p.originalPrice) * 100);
     const isFav = favorites.includes(p.id);
     const modalImage = p.image
-    ? `<img src="${p.image}" alt="${p.name}" class="modal-photo">`
-    : p.emoji;
-   
+        ? `<img src="${p.image}" alt="${p.name}" class="modal-photo">`
+        : p.emoji;
+
     document.getElementById('modalBody').innerHTML = `
         <div class="modal-hero" style="background: linear-gradient(135deg, ${p.color}60, ${p.color}90);">
             ${modalImage}
@@ -136,8 +136,13 @@ const openProduct = (id) => {
                 <button class="btn btn-secondary" onclick="toggleFavFromModal(${p.id})">
                     ${isFav ? '💖 Favorit' : '🤍 Simpan'}
                 </button>
-                <button class="btn btn-primary" onclick="addToCart(${p.id}); closeModal('productModal');">
-                    🛒 Keranjang
+                <button class="btn btn-secondary" onclick="shareProduct(${p.id})">
+                    🔗 Bagikan
+                </button>
+            </div>
+            <div class="modal-actions" style="margin-top: 8px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="addToCart(${p.id}); closeModal('productModal');">
+                    🛒 + Keranjang
                 </button>
             </div>
             <div style="margin-top: 10px;">
@@ -152,6 +157,38 @@ const openProduct = (id) => {
 };
 
 const closeModal = (id) => document.getElementById(id).classList.remove('open');
+
+// ─── Share Produk ───
+const shareProduct = async (id) => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+
+    const url = window.location.origin + window.location.pathname + '#product-' + id;
+    const text = `🛍️ ${p.name}\n💰 ${formatRupiah(p.price)} (diskon ${Math.round((1 - p.price/p.originalPrice)*100)}%!)\n\nLihat di Sugarcloset:\n${url}`;
+
+    // Coba Web Share API dulu (mobile)
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: p.name,
+                text: text,
+                url: url
+            });
+            return;
+        } catch (err) {
+            // User cancel atau error — fallback ke copy
+        }
+    }
+
+    // Fallback: copy to clipboard
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast('🔗 Link disalin! Tinggal paste ke chat');
+    } catch (err) {
+        // Fallback terakhir: prompt
+        prompt('Copy link ini:', text);
+    }
+};
 
 // ─── Favorites ───
 const toggleFav = (id, btn) => {
@@ -237,7 +274,9 @@ const renderCart = () => {
         total += p.price * qty;
         return `
             <div class="cart-item">
-                <div class="cart-item-img" style="background: ${p.color}60;">${p.emoji}</div>
+                <div class="cart-item-img" style="background: ${p.color}60;">
+                    ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                </div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${p.name}</div>
                     <div class="cart-item-price">${formatRupiah(p.price)} × ${qty}</div>
@@ -253,11 +292,57 @@ const renderCart = () => {
     t.textContent = formatRupiah(total);
 };
 
-// ─── Checkout ───
-const checkout = () => {
+// ─── Checkout Flow ───
+const openCheckoutForm = () => {
     if (cart.length === 0) { showToast('🛒 Keranjang masih kosong!'); return; }
+
+    // Tutup modal keranjang
+    closeModal('cartModal');
+
+    // Hitung total
+    let total = 0;
+    let itemCount = 0;
+    cart.forEach(item => {
+        const p = PRODUCTS.find(x => x.id === item.id);
+        if (p) {
+            const qty = item.qty || 1;
+            total += p.price * qty;
+            itemCount += qty;
+        }
+    });
+
+    document.getElementById('coItems').textContent = itemCount;
+    document.getElementById('coTotal').textContent = formatRupiah(total);
+
+    // Reset form (kecuali kalau data sebelumnya ada di localStorage)
+    const saved = JSON.parse(localStorage.getItem('sugarcloset_buyer') || '{}');
+    if (saved.name) document.getElementById('cName').value = saved.name;
+    if (saved.phone) document.getElementById('cPhone').value = saved.phone;
+    if (saved.address) document.getElementById('cAddress').value = saved.address;
+
+    document.getElementById('checkoutModal').classList.add('open');
+};
+
+const submitCheckout = (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const address = document.getElementById('cAddress').value.trim();
+    const notes = document.getElementById('cNotes').value.trim();
+
+    if (!name || !phone || !address) {
+        showToast('⚠️ Lengkapi data dulu ya!');
+        return;
+    }
+
+    // Simpan data pembeli untuk next order
+    localStorage.setItem('sugarcloset_buyer', JSON.stringify({ name, phone, address }));
+
+    // Bangun pesan WA
     let msg = 'Halo kak! Saya mau pesan:\n\n';
     let total = 0;
+
     cart.forEach(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
         if (p) {
@@ -266,8 +351,27 @@ const checkout = () => {
             total += p.price * qty;
         }
     });
-    msg += `💰 *Total: ${formatRupiah(total)}*\n\nMohon konfirmasi ketersediaan ya, terima kasih!`;
+
+    msg += `💰 *Total: ${formatRupiah(total)}*\n\n`;
+    msg += '📦 *DATA PENGIRIMAN*\n';
+    msg += `Nama: ${name}\n`;
+    msg += `No. WA: ${phone}\n`;
+    msg += `Alamat: ${address}\n`;
+    if (notes) msg += `\n📝 Catatan: ${notes}`;
+    msg += '\n\nMohon konfirmasi ketersediaan ya, terima kasih! 🌸';
+
     window.open(`https://wa.me/${SHOP_INFO.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    // Tutup modal
+    closeModal('checkoutModal');
+
+    // Optional: clear cart setelah checkout
+    // Kalau mau clear otomatis, uncomment 2 baris di bawah
+    // cart = [];
+    // saveCart();
+    // updateBadges();
+
+    showToast('💌 Pesanan dikirim ke WhatsApp!');
 };
 
 // ─── Badges ───
@@ -294,7 +398,9 @@ const renderFavModal = () => {
         if (!p) return '';
         return `
             <div class="cart-item">
-                <div class="cart-item-img" style="background: ${p.color}60;">${p.emoji}</div>
+                <div class="cart-item-img" style="background: ${p.color}60;">
+                    ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                </div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${p.name}</div>
                     <div class="cart-item-price">${formatRupiah(p.price)}</div>
@@ -302,6 +408,18 @@ const renderFavModal = () => {
                 <button class="cart-item-remove" onclick="toggleFav(${p.id}); renderFavModal(); renderProducts();">💔</button>
             </div>`;
     }).join('');
+};
+
+// ─── Back to Top ───
+const initBackToTop = () => {
+    const btn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) btn.classList.add('show');
+        else btn.classList.remove('show');
+    });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 };
 
 // ─── Events ───
@@ -320,7 +438,6 @@ const initEvents = () => {
         });
     });
 
-    // Custom dropdown sort
     const sortWrapper = document.getElementById('sortWrapper');
     const sortBtn = document.getElementById('sortBtn');
     const sortLabel = document.getElementById('sortLabel');
@@ -360,6 +477,8 @@ const initEvents = () => {
     document.getElementById('modalClose').addEventListener('click', () => closeModal('productModal'));
     document.getElementById('cartClose').addEventListener('click', () => closeModal('cartModal'));
     document.getElementById('favClose').addEventListener('click', () => closeModal('favModal'));
+    document.getElementById('checkoutClose').addEventListener('click', () => closeModal('checkoutModal'));
+    document.getElementById('checkoutCancel').addEventListener('click', () => closeModal('checkoutModal'));
 
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
@@ -369,7 +488,9 @@ const initEvents = () => {
         if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
     });
 
-    document.getElementById('checkoutBtn').addEventListener('click', checkout);
+    // Checkout
+    document.getElementById('checkoutBtn').addEventListener('click', openCheckoutForm);
+    document.getElementById('checkoutForm').addEventListener('submit', submitCheckout);
 
     document.getElementById('menuBtn').addEventListener('click', () => {
         document.querySelector('.nav').classList.toggle('open');
@@ -380,7 +501,7 @@ const initEvents = () => {
     });
 };
 
-// ─── Bikin fungsi bisa dipanggil dari HTML ───
+// ─── Global functions ───
 window.changeQty = changeQty;
 window.removeFromCart = removeFromCart;
 window.addToCart = addToCart;
@@ -388,12 +509,14 @@ window.toggleFav = toggleFav;
 window.toggleFavFromModal = toggleFavFromModal;
 window.openProduct = openProduct;
 window.closeModal = closeModal;
+window.shareProduct = shareProduct;
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
     initFloatingHearts();
     initEvents();
+    initBackToTop();
     updateBadges();
     renderProducts();
-    console.log('🎀 Sugarcloset loaded');
+    console.log('🎀 Sugarcloset loaded (Paket B)');
 });
