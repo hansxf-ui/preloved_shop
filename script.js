@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   SUGARCLOSET — Script (Clean)
+   SUGARCLOSET — Script Final
    ═══════════════════════════════════════════ */
 
 let currentCategory = 'all';
@@ -286,6 +286,7 @@ const initEvents = () => {
         currentSearch = e.target.value;
         renderProducts();
     });
+
     document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -294,31 +295,60 @@ const initEvents = () => {
             renderProducts();
         });
     });
-    document.getElementById('sortSelect').addEventListener('change', e => {
-        currentSort = e.target.value;
-        renderProducts();
+
+    // Custom dropdown sort
+    const sortWrapper = document.getElementById('sortWrapper');
+    const sortBtn = document.getElementById('sortBtn');
+    const sortLabel = document.getElementById('sortLabel');
+
+    sortBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sortWrapper.classList.toggle('open');
     });
+
+    document.querySelectorAll('.custom-select-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            currentSort = opt.dataset.value;
+            sortLabel.textContent = opt.textContent;
+            sortWrapper.classList.remove('open');
+            renderProducts();
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!sortWrapper.contains(e.target)) sortWrapper.classList.remove('open');
+    });
+
     document.getElementById('cartBtn').addEventListener('click', () => {
         renderCart();
         document.getElementById('cartModal').classList.add('open');
     });
+
     document.getElementById('favBtn').addEventListener('click', () => {
         renderFavModal();
         document.getElementById('favModal').classList.add('open');
     });
+
     document.getElementById('modalClose').addEventListener('click', () => closeModal('productModal'));
     document.getElementById('cartClose').addEventListener('click', () => closeModal('cartModal'));
     document.getElementById('favClose').addEventListener('click', () => closeModal('favModal'));
+
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
     });
+
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
     });
+
     document.getElementById('checkoutBtn').addEventListener('click', checkout);
+
     document.getElementById('menuBtn').addEventListener('click', () => {
         document.querySelector('.nav').classList.toggle('open');
     });
+
     document.querySelectorAll('.nav-link').forEach(l => {
         l.addEventListener('click', () => document.querySelector('.nav').classList.remove('open'));
     });
