@@ -109,10 +109,13 @@ const openProduct = (id) => {
     if (!p) return;
     const discount = Math.round((1 - p.price / p.originalPrice) * 100);
     const isFav = favorites.includes(p.id);
-
+    const modalImage = p.image
+    ? `<img src="${p.image}" alt="${p.name}" class="modal-photo">`
+    : p.emoji;
+   
     document.getElementById('modalBody').innerHTML = `
         <div class="modal-hero" style="background: linear-gradient(135deg, ${p.color}60, ${p.color}90);">
-            ${p.emoji}
+            ${modalImage}
         </div>
         <div class="modal-info">
             <span class="modal-cat">${p.category.toUpperCase()}</span>
