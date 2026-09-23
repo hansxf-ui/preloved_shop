@@ -1,0 +1,322 @@
+/* ═══════════════════════════════════════════
+   ADMIN PANEL — Sugarcloset
+   ═══════════════════════════════════════════ */
+
+.admin-body { background: var(--cream); }
+
+.admin-header { background: rgba(255, 249, 240, 0.95); }
+
+.admin-section {
+    padding: 30px 0 80px;
+    position: relative;
+    z-index: 1;
+}
+
+.admin-title {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.admin-title h1 {
+    font-family: var(--font-head);
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.admin-title p {
+    color: var(--text-soft);
+    font-size: 13px;
+}
+
+/* ═══ Stats ═══ */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-stat-card {
+    background: var(--white);
+    border: 2px dashed var(--pink-light);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-stat-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.admin-stat-label {
+    font-size: 11px;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.admin-stat-value {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--pink-dark);
+}
+
+/* ═══ Toolbar ═══ */
+.admin-toolbar {
+    background: var(--white);
+    border: 2px dashed var(--pink-light);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.admin-actions .btn {
+    padding: 9px 14px;
+    font-size: 12px;
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+}
+
+/* ═══ Product Grid ═══ */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.admin-card {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+}
+
+.admin-card:hover {
+    border-color: var(--pink-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-card-img {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+}
+
+.admin-card-info { flex: 1; min-width: 0; }
+
+.admin-card-name {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-card-price {
+    font-weight: 700;
+    color: var(--pink-dark);
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.admin-card-meta {
+    font-size: 11px;
+    color: var(--text-mute);
+}
+
+.admin-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-icon-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    background: var(--cream);
+}
+
+.admin-icon-btn.edit { background: #E0E8FF; }
+.admin-icon-btn.delete { background: #FFE0E0; }
+
+.admin-icon-btn:hover {
+    transform: scale(1.15);
+}
+
+/* ═══ Form Modal ═══ */
+.admin-modal {
+    max-width: 520px;
+    padding: 24px;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.form-row,
+.form-row-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.form-row-2 > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-form label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+    padding-left: 4px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+    padding: 10px 14px;
+    border: 2px solid var(--pink-light);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+    border-color: var(--pink);
+    background: var(--white);
+}
+
+.admin-form textarea {
+    resize: vertical;
+    min-height: 70px;
+    font-family: var(--font-body);
+}
+
+.admin-form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.admin-form-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* ═══ Confirm Dialog ═══ */
+.admin-confirm {
+    position: fixed;
+    inset: 0;
+    background: rgba(74, 59, 82, 0.55);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 20px;
+}
+
+.admin-confirm-box {
+    background: var(--cream);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    border: 3px solid var(--white);
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+}
+
+.admin-confirm-box h3 {
+    font-family: var(--font-head);
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.admin-confirm-box p {
+    color: var(--text-soft);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.admin-confirm-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-confirm-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* ═══ Mobile ═══ */
+@media (max-width: 720px) {
+    .admin-title h1 { font-size: 22px; }
+    .admin-stats { grid-template-columns: 1fr 1fr; }
+    .admin-stat-card { padding: 12px; }
+    .admin-stat-icon { font-size: 26px; }
+    .admin-stat-value { font-size: 15px; }
+    .admin-grid { grid-template-columns: 1fr; }
+    .form-row-2 { grid-template-columns: 1fr; }
+}
