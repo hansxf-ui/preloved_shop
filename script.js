@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   SUGARCLOSET — Script Final (Paket B)
+   SUGARCLOSET — Script Final (Paket D)
    ═══════════════════════════════════════════ */
 
 let currentCategory = 'all';
@@ -7,6 +7,8 @@ let currentSearch = '';
 let currentSort = 'newest';
 let cart = JSON.parse(localStorage.getItem('sugarcloset_cart') || '[]');
 let favorites = JSON.parse(localStorage.getItem('sugarcloset_favs') || '[]');
+let reviews = JSON.parse(localStorage.getItem('sugarcloset_reviews') || '{}');
+let searchHistory = JSON.parse(localStorage.getItem('sugarcloset_search_history') || '[]');
 
 // ─── Helpers ───
 const formatRupiah = (num) => 'Rp ' + num.toLocaleString('id-ID');
@@ -17,6 +19,14 @@ const showToast = (msg) => {
     toast.classList.add('show');
     clearTimeout(window._toastTimer);
     window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+};
+
+const getProductReviews = (id) => reviews[id] || [];
+const getProductRating = (id) => {
+    const list = getProductReviews(id);
+    if (list.length === 0) return null;
+    const avg = list.reduce((s, r) => s + r.rating, 0) / list.length;
+    return { avg: avg.toFixed(1), count: list.length };
 };
 
 // ─── Floating ───
@@ -32,6 +42,52 @@ const initFloatingHearts = () => {
         s.style.fontSize = (14 + Math.random() * 18) + 'px';
         container.appendChild(s);
     }
+};
+
+// ─── Search History ───
+const saveSearchHistory = (query) => {
+    if (!query || query.length < 2) return;
+    searchHistory = searchHistory.filter(q => q.toLowerCase() !== query.toLowerCase());
+    searchHistory.unshift(query);
+    searchHistory = searchHistory.slice(0, 8);
+    localStorage.setItem('sugarcloset_search_history', JSON.stringify(searchHistory));
+};
+
+const renderSearchHistory = () => {
+    const el = document.getElementById('searchHistory');
+    if (!el) return;
+    if (searchHistory.length === 0) {
+        el.classList.remove('show');
+        return;
+    }
+    el.innerHTML = `
+        <div class="history-head">
+            <span>🕐 Pencarian Terakhir</span>
+            <button class="history-clear" id="historyClear">Hapus</button>
+        </div>
+        ${searchHistory.map(q => `
+            <div class="history-item" onclick="applySearchHistory('${q.replace(/'/g, "\\'")}')">
+                <span class="history-icon">🔍</span>
+                <span>${q}</span>
+            </div>
+        `).join('')}
+    `;
+    el.classList.add('show');
+    const clear = document.getElementById('historyClear');
+    if (clear) clear.addEventListener('click', (e) => {
+        e.stopPropagation();
+        searchHistory = [];
+        localStorage.removeItem('sugarcloset_search_history');
+        el.classList.remove('show');
+        showToast('🗑️ Riwayat pencarian dibersihkan');
+    });
+};
+
+const applySearchHistory = (q) => {
+    document.getElementById('searchInput').value = q;
+    currentSearch = q;
+    renderProducts();
+    document.getElementById('searchHistory').classList.remove('show');
 };
 
 // ─── Filter ───
@@ -71,6 +127,10 @@ const renderProducts = () => {
     grid.innerHTML = products.map((p, i) => {
         const discount = Math.round((1 - p.price / p.originalPrice) * 100);
         const isFav = favorites.includes(p.id);
+        const ratingData = getProductRating(p.id);
+        const ratingDisplay = ratingData
+            ? `${ratingData.avg} (${ratingData.count})`
+            : `${p.rating}`;
         const imageHTML = p.image
             ? `<img src="${p.image}" alt="${p.name}" class="product-photo">`
             : `<span class="product-emoji">${p.emoji}</span>`;
@@ -92,7 +152,7 @@ const renderProducts = () => {
                     </div>
                     <div class="product-meta">
                         <span>👤 ${p.seller}</span>
-                        <span>⭐ ${p.rating}</span>
+                        <span>⭐ ${ratingDisplay}</span>
                     </div>
                     <button class="product-add" onclick="event.stopPropagation(); addToCart(${p.id})">
                         🛒 + Keranjang
@@ -113,6 +173,42 @@ const openProduct = (id) => {
         ? `<img src="${p.image}" alt="${p.name}" class="modal-photo">`
         : p.emoji;
 
+    // Related products — sama kategori, exclude yg ini
+    const related = PRODUCTS
+        .filter(x => x.category === p.category && x.id !== p.id)
+        .slice(0, 3);
+
+    // Reviews
+    const productReviews = getProductReviews(p.id);
+    const ratingData = getProductRating(p.id);
+    const avgRating = ratingData ? ratingData.avg : p.rating;
+    const reviewCount = ratingData ? ratingData.count : 0;
+
+    const reviewsHTML = productReviews.length > 0
+        ? productReviews.map(r => `
+            <div class="review-item">
+                <div class="review-head">
+                    <span class="review-name">${r.name}</span>
+                    <span class="review-stars">${'⭐'.repeat(r.rating)}</span>
+                    <span class="review-date">${r.date}</span>
+                </div>
+                <p class="review-text">${r.text}</p>
+            </div>
+        `).join('')
+        : `<p class="review-empty">Belum ada ulasan. Jadilah yang pertama! 🌟</p>`;
+
+    const relatedHTML = related.length > 0
+        ? related.map(rp => `
+            <div class="related-card" onclick="openProduct(${rp.id})">
+                <div class="related-img" style="background: ${rp.color}60;">
+                    ${rp.image ? `<img src="${rp.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : rp.emoji}
+                </div>
+                <div class="related-name">${rp.name}</div>
+                <div class="related-price">${formatRupiah(rp.price)}</div>
+            </div>
+        `).join('')
+        : '';
+
     document.getElementById('modalBody').innerHTML = `
         <div class="modal-hero" style="background: linear-gradient(135deg, ${p.color}60, ${p.color}90);">
             ${modalImage}
@@ -120,6 +216,12 @@ const openProduct = (id) => {
         <div class="modal-info">
             <span class="modal-cat">${p.category.toUpperCase()}</span>
             <h2 class="modal-name">${p.name}</h2>
+
+            <div class="modal-rating-row">
+                <span class="modal-stars">${'⭐'.repeat(Math.round(avgRating))}</span>
+                <span class="modal-rating-text">${avgRating} · ${reviewCount > 0 ? reviewCount + ' ulasan' : 'belum ada ulasan'}</span>
+            </div>
+
             <div class="modal-price-row">
                 <span class="modal-price">${formatRupiah(p.price)}</span>
                 <span class="modal-original">${formatRupiah(p.originalPrice)}</span>
@@ -151,6 +253,21 @@ const openProduct = (id) => {
                     💬 Tanya Penjual
                 </a>
             </div>
+
+            ${relatedHTML ? `
+            <div class="related-section">
+                <h3 class="related-title">✨ Produk Serupa</h3>
+                <div class="related-grid">${relatedHTML}</div>
+            </div>
+            ` : ''}
+
+            <div class="reviews-section">
+                <h3 class="reviews-title">💬 Ulasan Pembeli (${reviewCount})</h3>
+                <div class="reviews-list">${reviewsHTML}</div>
+                <button class="btn btn-secondary btn-full" style="margin-top: 12px;" onclick="openReviewForm(${p.id})">
+                    ✍️ Tulis Ulasan
+                </button>
+            </div>
         </div>
     `;
     document.getElementById('productModal').classList.add('open');
@@ -158,34 +275,97 @@ const openProduct = (id) => {
 
 const closeModal = (id) => document.getElementById(id).classList.remove('open');
 
-// ─── Share Produk ───
+// ─── Open Review Form ───
+const openReviewForm = (productId) => {
+    const p = PRODUCTS.find(x => x.id === productId);
+    if (!p) return;
+
+    document.getElementById('modalBody').innerHTML = `
+        <div class="modal-info" style="padding-top: 40px;">
+            <button class="btn btn-secondary" style="margin-bottom: 16px;" onclick="openProduct(${productId})">
+                ← Kembali ke ${p.name}
+            </button>
+            <h2 class="modal-name" style="margin-bottom: 8px;">✍️ Tulis Ulasan</h2>
+            <p class="modal-desc" style="margin-bottom: 20px;">Bagikan pengalamanmu tentang produk ini.</p>
+
+            <form id="reviewForm" class="checkout-form">
+                <div class="form-row">
+                    <label>Nama Kamu *</label>
+                    <input type="text" id="rName" required placeholder="Contoh: Rina A.">
+                </div>
+                <div class="form-row">
+                    <label>Rating *</label>
+                    <div class="star-picker" id="starPicker">
+                        <span class="star" data-value="1">⭐</span>
+                        <span class="star" data-value="2">⭐</span>
+                        <span class="star" data-value="3">⭐</span>
+                        <span class="star" data-value="4">⭐</span>
+                        <span class="star" data-value="5">⭐</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>Ulasan *</label>
+                    <textarea id="rText" required rows="4" placeholder="Ceritakan pengalamanmu..."></textarea>
+                </div>
+                <div class="checkout-actions">
+                    <button type="button" class="btn btn-secondary" onclick="openProduct(${productId})">Batal</button>
+                    <button type="submit" class="btn btn-primary">💾 Kirim Ulasan</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    let selectedRating = 5;
+    const stars = document.querySelectorAll('#starPicker .star');
+    const updateStars = (rating) => {
+        stars.forEach((s, i) => {
+            s.classList.toggle('active', i < rating);
+            s.classList.toggle('dim', i >= rating);
+        });
+    };
+    updateStars(selectedRating);
+
+    stars.forEach((s, i) => {
+        s.addEventListener('click', () => {
+            selectedRating = i + 1;
+            updateStars(selectedRating);
+        });
+    });
+
+    document.getElementById('reviewForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('rName').value.trim();
+        const text = document.getElementById('rText').value.trim();
+        if (!name || !text) return;
+
+        if (!reviews[productId]) reviews[productId] = [];
+        reviews[productId].unshift({
+            name,
+            rating: selectedRating,
+            text,
+            date: 'Baru saja'
+        });
+        localStorage.setItem('sugarcloset_reviews', JSON.stringify(reviews));
+
+        showToast('🌟 Ulasan terkirim! Terima kasih');
+        renderProducts();
+        openProduct(productId);
+    });
+};
+
+// ─── Share ───
 const shareProduct = async (id) => {
     const p = PRODUCTS.find(x => x.id === id);
     if (!p) return;
-
     const url = window.location.origin + window.location.pathname + '#product-' + id;
-    const text = `🛍️ ${p.name}\n💰 ${formatRupiah(p.price)} (diskon ${Math.round((1 - p.price/p.originalPrice)*100)}%!)\n\nLihat di Sugarcloset:\n${url}`;
-
-    // Coba Web Share API dulu (mobile)
+    const text = `🛍️ ${p.name}\n💰 ${formatRupiah(p.price)}\n\nLihat di Sugarcloset:\n${url}`;
     if (navigator.share) {
-        try {
-            await navigator.share({
-                title: p.name,
-                text: text,
-                url: url
-            });
-            return;
-        } catch (err) {
-            // User cancel atau error — fallback ke copy
-        }
+        try { await navigator.share({ title: p.name, text, url }); return; } catch (e) {}
     }
-
-    // Fallback: copy to clipboard
     try {
         await navigator.clipboard.writeText(text);
-        showToast('🔗 Link disalin! Tinggal paste ke chat');
-    } catch (err) {
-        // Fallback terakhir: prompt
+        showToast('🔗 Link disalin!');
+    } catch (e) {
         prompt('Copy link ini:', text);
     }
 };
@@ -208,8 +388,8 @@ const toggleFav = (id, btn) => {
 
 const toggleFavFromModal = (id) => {
     const idx = favorites.indexOf(id);
-    if (idx > -1) { favorites.splice(idx, 1); showToast('💔 Dihapus dari favorit'); }
-    else { favorites.push(id); showToast('💖 Ditambahkan ke favorit'); }
+    if (idx > -1) { favorites.splice(idx, 1); showToast('💔 Dihapus'); }
+    else { favorites.push(id); showToast('💖 Ditambahkan'); }
     saveFavs();
     updateBadges();
     renderProducts();
@@ -240,10 +420,7 @@ const changeQty = (id, delta) => {
     const item = cart.find(x => x.id === id);
     if (!item) return;
     item.qty = (item.qty || 1) + delta;
-    if (item.qty < 1) {
-        removeFromCart(id);
-        return;
-    }
+    if (item.qty < 1) { removeFromCart(id); return; }
     saveCart();
     updateBadges();
     renderCart();
@@ -254,7 +431,6 @@ const saveCart = () => localStorage.setItem('sugarcloset_cart', JSON.stringify(c
 const renderCart = () => {
     const c = document.getElementById('cartItems');
     const t = document.getElementById('cartTotal');
-
     if (cart.length === 0) {
         c.innerHTML = `
             <div class="cart-empty">
@@ -265,7 +441,6 @@ const renderCart = () => {
         t.textContent = 'Rp 0';
         return;
     }
-
     let total = 0;
     c.innerHTML = cart.map(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
@@ -292,16 +467,11 @@ const renderCart = () => {
     t.textContent = formatRupiah(total);
 };
 
-// ─── Checkout Flow ───
+// ─── Checkout ───
 const openCheckoutForm = () => {
     if (cart.length === 0) { showToast('🛒 Keranjang masih kosong!'); return; }
-
-    // Tutup modal keranjang
     closeModal('cartModal');
-
-    // Hitung total
-    let total = 0;
-    let itemCount = 0;
+    let total = 0, itemCount = 0;
     cart.forEach(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
         if (p) {
@@ -310,39 +480,25 @@ const openCheckoutForm = () => {
             itemCount += qty;
         }
     });
-
     document.getElementById('coItems').textContent = itemCount;
     document.getElementById('coTotal').textContent = formatRupiah(total);
-
-    // Reset form (kecuali kalau data sebelumnya ada di localStorage)
     const saved = JSON.parse(localStorage.getItem('sugarcloset_buyer') || '{}');
     if (saved.name) document.getElementById('cName').value = saved.name;
     if (saved.phone) document.getElementById('cPhone').value = saved.phone;
     if (saved.address) document.getElementById('cAddress').value = saved.address;
-
     document.getElementById('checkoutModal').classList.add('open');
 };
 
 const submitCheckout = (e) => {
     e.preventDefault();
-
     const name = document.getElementById('cName').value.trim();
     const phone = document.getElementById('cPhone').value.trim();
     const address = document.getElementById('cAddress').value.trim();
     const notes = document.getElementById('cNotes').value.trim();
-
-    if (!name || !phone || !address) {
-        showToast('⚠️ Lengkapi data dulu ya!');
-        return;
-    }
-
-    // Simpan data pembeli untuk next order
+    if (!name || !phone || !address) { showToast('⚠️ Lengkapi data!'); return; }
     localStorage.setItem('sugarcloset_buyer', JSON.stringify({ name, phone, address }));
-
-    // Bangun pesan WA
     let msg = 'Halo kak! Saya mau pesan:\n\n';
     let total = 0;
-
     cart.forEach(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
         if (p) {
@@ -351,26 +507,13 @@ const submitCheckout = (e) => {
             total += p.price * qty;
         }
     });
-
     msg += `💰 *Total: ${formatRupiah(total)}*\n\n`;
     msg += '📦 *DATA PENGIRIMAN*\n';
-    msg += `Nama: ${name}\n`;
-    msg += `No. WA: ${phone}\n`;
-    msg += `Alamat: ${address}\n`;
+    msg += `Nama: ${name}\nNo. WA: ${phone}\nAlamat: ${address}\n`;
     if (notes) msg += `\n📝 Catatan: ${notes}`;
     msg += '\n\nMohon konfirmasi ketersediaan ya, terima kasih! 🌸';
-
     window.open(`https://wa.me/${SHOP_INFO.phone}?text=${encodeURIComponent(msg)}`, '_blank');
-
-    // Tutup modal
     closeModal('checkoutModal');
-
-    // Optional: clear cart setelah checkout
-    // Kalau mau clear otomatis, uncomment 2 baris di bawah
-    // cart = [];
-    // saveCart();
-    // updateBadges();
-
     showToast('💌 Pesanan dikirim ke WhatsApp!');
 };
 
@@ -410,23 +553,117 @@ const renderFavModal = () => {
     }).join('');
 };
 
+// ─── Promo Banner ───
+const initPromoBanner = () => {
+    const banner = document.getElementById('promoBanner');
+    const close = document.getElementById('promoClose');
+    const header = document.getElementById('mainHeader');
+    const dismissed = localStorage.getItem('sugarcloset_promo_dismissed');
+
+    const updateHeaderOffset = () => {
+        if (!banner || banner.style.display === 'none') {
+            header.style.top = '0px';
+        } else {
+            header.style.top = banner.offsetHeight + 'px';
+        }
+    };
+
+    if (dismissed === 'true') {
+        banner.style.display = 'none';
+    } else {
+        banner.classList.add('show');
+    }
+
+    setTimeout(updateHeaderOffset, 50);
+    window.addEventListener('resize', updateHeaderOffset);
+
+    if (close) {
+        close.addEventListener('click', () => {
+            banner.classList.remove('show');
+            setTimeout(() => {
+                banner.style.display = 'none';
+                updateHeaderOffset();
+            }, 300);
+            localStorage.setItem('sugarcloset_promo_dismissed', 'true');
+            showToast('👍 Promo disembunyikan');
+        });
+    }
+};
+
 // ─── Back to Top ───
 const initBackToTop = () => {
     const btn = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) btn.classList.add('show');
-        else btn.classList.remove('show');
+        btn.classList.toggle('show', window.scrollY > 500);
     });
-    btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+};
+
+// ─── Testimoni ───
+const renderTestimonials = () => {
+    const grid = document.getElementById('testimonialGrid');
+    if (!grid || typeof TESTIMONIALS === 'undefined') return;
+    grid.innerHTML = TESTIMONIALS.map((t, i) => {
+        const stars = '⭐'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+        return `
+            <div class="testimonial-card" style="animation-delay: ${i * 0.06}s">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar" style="background: ${t.color}60;">${t.avatar}</div>
+                    <div class="testimonial-info">
+                        <div class="testimonial-name">${t.name}</div>
+                        <div class="testimonial-date">${t.date}</div>
+                    </div>
+                </div>
+                <div class="testimonial-stars">${stars}</div>
+                <p class="testimonial-text">"${t.text}"</p>
+                <div class="testimonial-product">📦 ${t.product}</div>
+            </div>
+        `;
+    }).join('');
+};
+
+// ─── FAQ ───
+const renderFAQ = () => {
+    const list = document.getElementById('faqList');
+    if (!list || typeof FAQS === 'undefined') return;
+    list.innerHTML = FAQS.map((f, i) => `
+        <details class="faq-item" ${i === 0 ? 'open' : ''}>
+            <summary class="faq-question">
+                <span>${f.q}</span>
+                <span class="faq-icon">+</span>
+            </summary>
+            <div class="faq-answer"><p>${f.a}</p></div>
+        </details>
+    `).join('');
 };
 
 // ─── Events ───
 const initEvents = () => {
-    document.getElementById('searchInput').addEventListener('input', e => {
+    const searchInput = document.getElementById('searchInput');
+    const searchBox = document.getElementById('searchBoxWrapper');
+
+    searchInput.addEventListener('input', e => {
         currentSearch = e.target.value;
         renderProducts();
+    });
+
+    searchInput.addEventListener('focus', () => {
+        renderSearchHistory();
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            saveSearchHistory(searchInput.value.trim());
+            searchBox.querySelector('.search-history').classList.remove('show');
+            searchInput.blur();
+        }
+    });
+
+    searchInput.addEventListener('blur', () => {
+        setTimeout(() => {
+            const el = document.getElementById('searchHistory');
+            if (el) el.classList.remove('show');
+        }, 200);
     });
 
     document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -441,13 +678,11 @@ const initEvents = () => {
     const sortWrapper = document.getElementById('sortWrapper');
     const sortBtn = document.getElementById('sortBtn');
     const sortLabel = document.getElementById('sortLabel');
-
     if (sortBtn) {
         sortBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             sortWrapper.classList.toggle('open');
         });
-
         document.querySelectorAll('.custom-select-option').forEach(opt => {
             opt.addEventListener('click', () => {
                 document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
@@ -458,7 +693,6 @@ const initEvents = () => {
                 renderProducts();
             });
         });
-
         document.addEventListener('click', (e) => {
             if (!sortWrapper.contains(e.target)) sortWrapper.classList.remove('open');
         });
@@ -468,40 +702,32 @@ const initEvents = () => {
         renderCart();
         document.getElementById('cartModal').classList.add('open');
     });
-
     document.getElementById('favBtn').addEventListener('click', () => {
         renderFavModal();
         document.getElementById('favModal').classList.add('open');
     });
-
     document.getElementById('modalClose').addEventListener('click', () => closeModal('productModal'));
     document.getElementById('cartClose').addEventListener('click', () => closeModal('cartModal'));
     document.getElementById('favClose').addEventListener('click', () => closeModal('favModal'));
     document.getElementById('checkoutClose').addEventListener('click', () => closeModal('checkoutModal'));
     document.getElementById('checkoutCancel').addEventListener('click', () => closeModal('checkoutModal'));
-
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
     });
-
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
     });
-
-    // Checkout
     document.getElementById('checkoutBtn').addEventListener('click', openCheckoutForm);
     document.getElementById('checkoutForm').addEventListener('submit', submitCheckout);
-
     document.getElementById('menuBtn').addEventListener('click', () => {
         document.querySelector('.nav').classList.toggle('open');
     });
-
     document.querySelectorAll('.nav-link').forEach(l => {
         l.addEventListener('click', () => document.querySelector('.nav').classList.remove('open'));
     });
 };
 
-// ─── Global functions ───
+// ─── Global ───
 window.changeQty = changeQty;
 window.removeFromCart = removeFromCart;
 window.addToCart = addToCart;
@@ -510,54 +736,12 @@ window.toggleFavFromModal = toggleFavFromModal;
 window.openProduct = openProduct;
 window.closeModal = closeModal;
 window.shareProduct = shareProduct;
-
-// ─── Init ───
-// ─── Render Testimoni ───
-const renderTestimonials = () => {
-    const grid = document.getElementById('testimonialGrid');
-    if (!grid || typeof TESTIMONIALS === 'undefined') return;
-
-    grid.innerHTML = TESTIMONIALS.map((t, i) => {
-        const stars = '⭐'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
-        return `
-            <div class="testimonial-card" style="animation-delay: ${i * 0.06}s">
-                <div class="testimonial-header">
-                    <div class="testimonial-avatar" style="background: ${t.color}60;">
-                        ${t.avatar}
-                    </div>
-                    <div class="testimonial-info">
-                        <div class="testimonial-name">${t.name}</div>
-                        <div class="testimonial-date">${t.date}</div>
-                    </div>
-                </div>
-                <div class="testimonial-stars">${stars}</div>
-                <p class="testimonial-text">"${t.text}"</p>
-                <div class="testimonial-product">📦 ${t.product}</div>
-            </div>
-        `;
-    }).join('');
-};
-
-// ─── Render FAQ ───
-const renderFAQ = () => {
-    const list = document.getElementById('faqList');
-    if (!list || typeof FAQS === 'undefined') return;
-
-    list.innerHTML = FAQS.map((f, i) => `
-        <details class="faq-item" ${i === 0 ? 'open' : ''}>
-            <summary class="faq-question">
-                <span>${f.q}</span>
-                <span class="faq-icon">+</span>
-            </summary>
-            <div class="faq-answer">
-                <p>${f.a}</p>
-            </div>
-        </details>
-    `).join('');
-};
+window.openReviewForm = openReviewForm;
+window.applySearchHistory = applySearchHistory;
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
+    initPromoBanner();
     initFloatingHearts();
     initEvents();
     initBackToTop();
@@ -565,5 +749,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     renderTestimonials();
     renderFAQ();
-    console.log('🎀 Sugarcloset loaded (Paket C)');
+    console.log('🎀 Sugarcloset loaded (Paket D — Full Features)');
 });
