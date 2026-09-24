@@ -22,7 +22,7 @@ const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
 
 const SHOP_INFO = {
     name: "Sugarcloset",
-    phone: "6281234567890",
+    phone: "6282251451031",
     instagram: "@sugarcloset",
     tiktok: "@sugarcloset"
 };
