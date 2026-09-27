@@ -401,3 +401,29 @@
     border-radius: 10px;
     padding: 8px 12px;
 }
+
+/* ═══════════════════════════════════════════
+   SVG ICONS (pengganti emoji)
+   ═══════════════════════════════════════════ */
+.svg-ic {
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: -0.2em;
+    flex: none;
+    display: inline-block;
+}
+
+.logo-icon .svg-ic { width: 26px; height: 26px; color: #FF8FB3; }
+.admin-stat-icon .svg-ic { width: 34px; height: 34px; color: #FF8FB3; }
+.admin-icon-btn .svg-ic { width: 18px; height: 18px; }
+.search-icon .svg-ic { width: 18px; height: 18px; color: #9AA0AA; }
+.empty-icon .svg-ic { width: 54px; height: 54px; color: #C9CFD8; }
+.modal-close .svg-ic, .image-remove-btn .svg-ic { width: 16px; height: 16px; }
+.modal-title .svg-ic { width: 22px; height: 22px; color: #FF8FB3; }
+.btn .svg-ic { width: 16px; height: 16px; }
+.image-preview-placeholder .svg-ic { width: 30px; height: 30px; color: #C9CFD8; }
+.admin-note .svg-ic { width: 16px; height: 16px; color: #FFB300; }
+.toast .svg-ic { width: 18px; height: 18px; color: #FF5C8A; }
+.admin-confirm-box h3 .svg-ic { width: 22px; height: 22px; color: #FF8FB3; }
+.ph-icon { width: 56px; height: 56px; color: #FF8FB3; opacity: 0.7; }
+label .svg-ic { width: 15px; height: 15px; color: #FF8FB3; }
