@@ -257,6 +257,9 @@ const openProduct = (id) => {
                 <button class="btn btn-secondary" onclick="shareProduct(${p.id})">
                     ${icon('linkIcon', 'svg-ic')} Bagikan
                 </button>
+                <button class="btn btn-wa" onclick="shareToWhatsApp(${p.id})">
+                    ${icon('whatsapp', 'svg-ic')} WhatsApp
+                </button>
             </div>
             <div class="modal-actions" style="margin-top: 8px;">
                 <button class="btn btn-primary" style="flex: 1;" ${soldOut ? 'disabled' : ''} onclick="addToCart(${p.id}); ${soldOut ? '' : "closeModal('productModal');"}">
@@ -390,6 +393,18 @@ ${url}`;
     } catch (e) {
         prompt('Copy link ini:', text);
     }
+};
+
+// ─── Share to WhatsApp ───
+const buildWhatsAppShareUrl = (p, baseUrl) => {
+    const url = baseUrl + '#product-' + p.id;
+    const text = `${p.name} - ${formatRupiah(p.price)}\n\nLihat di Sugarcloset:\n${url}`;
+    return 'https://wa.me/?text=' + encodeURIComponent(text);
+};
+const shareToWhatsApp = (id) => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    window.open(buildWhatsAppShareUrl(p, window.location.origin + window.location.pathname), '_blank');
 };
 
 // ─── Favorites ───
@@ -808,6 +823,7 @@ window.toggleFavFromModal = toggleFavFromModal;
 window.openProduct = openProduct;
 window.closeModal = closeModal;
 window.shareProduct = shareProduct;
+window.shareToWhatsApp = shareToWhatsApp;
 window.openReviewForm = openReviewForm;
 window.applySearchHistory = applySearchHistory;
 
