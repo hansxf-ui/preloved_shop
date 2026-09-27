@@ -333,3 +333,5 @@ const CATEGORY_PRODUCT_ICONS = {
 };
 const productPlaceholder = (cat, cls = 'svg-ic ph-icon') =>
     icon(CATEGORY_PRODUCT_ICONS[cat] || 'productGeneric', cls);
+
+/* rebuild trigger */
