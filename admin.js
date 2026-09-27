@@ -2,7 +2,7 @@
    ADMIN PANEL — Sugarcloset + Foto Upload
    ═══════════════════════════════════════════ */
 
-let products = JSON.parse(localStorage.getItem('sugarcloset_products') || 'null') || [...DEFAULT_PRODUCTS];
+let products = JSON.parse(localStorage.getItem('sugarcloset_products_v2') || 'null') || [...DEFAULT_PRODUCTS];
 let pendingImageData = null;
 
 const formatRupiah = (num) => 'Rp ' + num.toLocaleString('id-ID');
@@ -17,7 +17,7 @@ const showToast = (msg) => {
 
 const saveProducts = () => {
     try {
-        localStorage.setItem('sugarcloset_products', JSON.stringify(products));
+        localStorage.setItem('sugarcloset_products_v2', JSON.stringify(products));
     } catch (e) {
         showToast('⚠️ Storage penuh! Kurangi atau kompres foto.');
     }
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const DEFAULT_PRODUCTS = ${JSON.stringify(products, null, 4)};
 
-const STORED = localStorage.getItem('sugarcloset_products');
+const STORED = localStorage.getItem('sugarcloset_products_v2');
 const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
 
 const SHOP_INFO = ${JSON.stringify(typeof SHOP_INFO !== 'undefined' ? SHOP_INFO : {}, null, 4)};
@@ -370,7 +370,7 @@ const FAQS = ${JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [], null, 4)}
     // ─── Reset ───
     document.getElementById('resetBtn').addEventListener('click', () => {
         showConfirm('🔄 Reset ke Default?', 'Semua perubahan akan hilang.', () => {
-            localStorage.removeItem('sugarcloset_products');
+            localStorage.removeItem('sugarcloset_products_v2');
             products = [...DEFAULT_PRODUCTS];
             renderStats();
             renderGrid();
