@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+    <script>try{var _t=localStorage.getItem('sugarcloset_theme');if(!_t)_t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2C10 2 8 4 8 6.5C8 8 9 9 10 9.5C8 10 6 12 6 14.5C6 17 8 18 10 18C10.5 18 11 17.5 11 17C11 16.5 10.5 16 10 16C9 16 8 15.5 8 14.5C8 13 10 11.5 12 11.5C14 11.5 16 13 16 14.5C16 15.5 15 16 14 16C13.5 16 13 16.5 13 17C13 17.5 13.5 18 14 18C16 18 18 17 18 14.5C18 12 16 10 14 9.5C15 9 16 8 16 6.5C16 4 14 2 12 2Z' fill='%23FF8FB3'/><path d='M12 22L10 14L12 15L14 14L12 22Z' fill='%23FF8FB3' opacity='0.6'/></svg>">
 </head>
 <body>
@@ -56,6 +57,9 @@
             <button class="icon-btn" id="cartBtn" title="Keranjang">
                 <span data-icon="cart"></span><span class="badge" id="cartCount">0</span>
             </button>
+            <button class="icon-btn" id="themeToggle" title="Mode gelap / terang">
+                <span data-icon="moon"></span>
+            </button>
             <button class="icon-btn menu-btn" id="menuBtn" title="Menu">
                 <span data-icon="menu"></span>
             </button>
@@ -84,12 +88,12 @@
 
         <div class="hero-illustration">
             <div class="hero-blob"></div>
-            <div class="hero-card c1" data-icon="productDress"></div>
-            <div class="hero-card c2" data-icon="productBag"></div>
-            <div class="hero-card c3" data-icon="productShoes"></div>
-            <div class="hero-card c4" data-icon="productRing"></div>
-            <div class="hero-card c5" data-icon="productBook"></div>
-            <div class="hero-card c6" data-icon="productHeadphone"></div>
+            <div class="hero-card c1" onclick="openProduct(2)" title="Dress Floral Korea Style"><img src="images/produk-2.jpg" alt="Dress Floral Korea Style" loading="lazy"></div>
+            <div class="hero-card c2" onclick="openProduct(1)" title="Tas Vintage Pink Pastel"><img src="images/produk-1.jpg" alt="Tas Vintage Pink Pastel" loading="lazy"></div>
+            <div class="hero-card c3" onclick="openProduct(3)" title="Sneakers White Clean"><img src="images/produk-3.jpg" alt="Sneakers White Clean" loading="lazy"></div>
+            <div class="hero-card c4" onclick="openProduct(4)" title="Kalung Choker Bunga"><img src="images/produk-4.jpg" alt="Kalung Choker Bunga" loading="lazy"></div>
+            <div class="hero-card c5" onclick="openProduct(5)" title="Novel Romantis Preloved"><img src="images/produk-5.jpg" alt="Novel Romantis Preloved" loading="lazy"></div>
+            <div class="hero-card c6" onclick="openProduct(6)" title="Headphone Cute Edition"><img src="images/produk-6.jpg" alt="Headphone Cute Edition" loading="lazy"></div>
         </div>
     </div>
 </section>
