@@ -20,7 +20,7 @@ const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
 
 const showToast = (msg) => {
     const toast = document.getElementById('toast');
-    toast.textContent = msg;
+    toast.innerHTML = msg;
     toast.classList.add('show');
     clearTimeout(window._toastTimer);
     window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
@@ -37,14 +37,18 @@ const getProductRating = (id) => {
 // ─── Floating ───
 const initFloatingHearts = () => {
     const container = document.getElementById('floatingHearts');
-    const emojis = ['💖', '🎀', '✨', '🌸', '💕', '🌈', '🦋', '💝'];
+    const icons = ['heart', 'ribbon', 'sparkle', 'flower', 'rainbow', 'star'];
+    const colors = ['#FF8FB3', '#FFB6D9', '#FFD1E3', '#F9A8D4', '#FF9EBB'];
     for (let i = 0; i < 15; i++) {
         const s = document.createElement('span');
-        s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        s.innerHTML = icon(icons[Math.floor(Math.random() * icons.length)], 'svg-ic');
         s.style.left = Math.random() * 100 + '%';
         s.style.animationDuration = (12 + Math.random() * 15) + 's';
         s.style.animationDelay = (Math.random() * 10) + 's';
-        s.style.fontSize = (14 + Math.random() * 18) + 'px';
+        const sz = Math.round(14 + Math.random() * 18);
+        s.style.width = sz + 'px';
+        s.style.height = sz + 'px';
+        s.style.color = colors[Math.floor(Math.random() * colors.length)];
         container.appendChild(s);
     }
 };
@@ -67,12 +71,12 @@ const renderSearchHistory = () => {
     }
     el.innerHTML = `
         <div class="history-head">
-            <span>🕐 Pencarian Terakhir</span>
+            <span>${icon('clock', 'svg-ic')} Pencarian Terakhir</span>
             <button class="history-clear" id="historyClear">Hapus</button>
         </div>
         ${searchHistory.map(q => `
             <div class="history-item" data-q="${escapeHTML(q)}">
-                <span class="history-icon">🔍</span>
+                <span class="history-icon">${icon('search', 'svg-ic')}</span>
                 <span>${escapeHTML(q)}</span>
             </div>
         `).join('')}
@@ -87,7 +91,7 @@ const renderSearchHistory = () => {
         searchHistory = [];
         localStorage.removeItem('sugarcloset_search_history');
         el.classList.remove('show');
-        showToast('🗑️ Riwayat pencarian dibersihkan');
+        showToast(icon('trash', 'svg-ic') + ' Riwayat pencarian dibersihkan');
     });
 };
 
@@ -142,7 +146,7 @@ const renderProducts = () => {
             : `${p.rating}`;
         const imageHTML = p.image
             ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" class="product-photo" loading="lazy">`
-            : `<span class="product-emoji">${p.emoji}</span>`;
+            : productPlaceholder(p.category);
         return `
             <div class="product-card ${soldOut ? 'is-soldout' : ''}" style="animation-delay: ${i * 0.04}s" onclick="openProduct(${p.id})">
                 <div class="product-image" style="background: linear-gradient(135deg, ${p.color}40, ${p.color}80);">
@@ -152,7 +156,7 @@ const renderProducts = () => {
                         : `<div class="product-badge">-${discount}%</div>`}
                     <button class="fav-toggle ${isFav ? 'active' : ''}"
                             onclick="event.stopPropagation(); toggleFav(${p.id}, this)">
-                        ${isFav ? '💖' : '🤍'}
+                        ${icon(isFav ? 'heart' : 'heartOutline', 'svg-ic')}
                     </button>
                 </div>
                 <div class="product-info">
@@ -162,11 +166,11 @@ const renderProducts = () => {
                         <span class="product-original">${formatRupiah(p.originalPrice)}</span>
                     </div>
                     <div class="product-meta">
-                        <span>👤 ${escapeHTML(p.seller)}</span>
-                        <span>⭐ ${ratingDisplay}</span>
+                        <span>${icon('user', 'svg-ic')} ${escapeHTML(p.seller)}</span>
+                        <span>${icon('star', 'svg-ic star-gold')} ${ratingDisplay}</span>
                     </div>
                     <button class="product-add" ${soldOut ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart(${p.id})">
-                        ${soldOut ? '😢 Stok Habis' : '🛒 + Keranjang'}
+                        ${soldOut ? 'Stok Habis' : icon('cart', 'svg-ic') + ' + Keranjang'}
                     </button>
                 </div>
             </div>
@@ -183,7 +187,7 @@ const openProduct = (id) => {
     const soldOut = (p.stock || 0) < 1;
     const modalImage = p.image
         ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" class="modal-photo">`
-        : p.emoji;
+        : productPlaceholder(p.category);
 
     // Related products — sama kategori, exclude yg ini
     const related = PRODUCTS
@@ -201,19 +205,19 @@ const openProduct = (id) => {
             <div class="review-item">
                 <div class="review-head">
                     <span class="review-name">${escapeHTML(r.name)}</span>
-                    <span class="review-stars">${'⭐'.repeat(Math.min(5, Math.max(1, r.rating | 0)))}</span>
+                    <span class="review-stars">${icon('star', 'svg-ic star-gold').repeat(Math.min(5, Math.max(1, r.rating | 0)))}</span>
                     <span class="review-date">${escapeHTML(r.date)}</span>
                 </div>
                 <p class="review-text">${escapeHTML(r.text)}</p>
             </div>
         `).join('')
-        : `<p class="review-empty">Belum ada ulasan. Jadilah yang pertama! 🌟</p>`;
+        : `<p class="review-empty">Belum ada ulasan. Jadilah yang pertama! ${icon('star', 'svg-ic star-gold')}</p>`;
 
     const relatedHTML = related.length > 0
         ? related.map(rp => `
             <div class="related-card" onclick="openProduct(${rp.id})">
                 <div class="related-img" style="background: ${rp.color}60;">
-                    ${rp.image ? `<img src="${escapeHTML(rp.image)}" alt="${escapeHTML(rp.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : rp.emoji}
+                    ${rp.image ? `<img src="${escapeHTML(rp.image)}" alt="${escapeHTML(rp.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : productPlaceholder(rp.category)}
                 </div>
                 <div class="related-name">${escapeHTML(rp.name)}</div>
                 <div class="related-price">${formatRupiah(rp.price)}</div>
@@ -230,7 +234,7 @@ const openProduct = (id) => {
             <h2 class="modal-name">${escapeHTML(p.name)}</h2>
 
             <div class="modal-rating-row">
-                <span class="modal-stars">${'⭐'.repeat(Math.round(avgRating))}</span>
+                <span class="modal-stars">${icon('star', 'svg-ic star-gold').repeat(Math.round(avgRating))}</span>
                 <span class="modal-rating-text">${avgRating} · ${reviewCount > 0 ? reviewCount + ' ulasan' : 'belum ada ulasan'}</span>
             </div>
 
@@ -242,42 +246,42 @@ const openProduct = (id) => {
             <p class="modal-desc">${escapeHTML(p.desc)}</p>
             <div class="modal-meta">
                 <div class="modal-meta-item"><strong>Kondisi</strong>${escapeHTML(p.condition)}</div>
-                <div class="modal-meta-item"><strong>Stok</strong>${soldOut ? 'Habis 😢' : p.stock + ' tersedia'}</div>
+                <div class="modal-meta-item"><strong>Stok</strong>${soldOut ? 'Habis' : p.stock + ' tersedia'}</div>
                 <div class="modal-meta-item"><strong>Penjual</strong>${escapeHTML(p.seller)}</div>
                 <div class="modal-meta-item"><strong>Terjual</strong>${p.sold} kali</div>
             </div>
             <div class="modal-actions">
                 <button class="btn btn-secondary" onclick="toggleFavFromModal(${p.id})">
-                    ${isFav ? '💖 Favorit' : '🤍 Simpan'}
+                    ${icon(isFav ? 'heart' : 'heartOutline', 'svg-ic') + (isFav ? ' Favorit' : ' Simpan')}
                 </button>
                 <button class="btn btn-secondary" onclick="shareProduct(${p.id})">
-                    🔗 Bagikan
+                    ${icon('linkIcon', 'svg-ic')} Bagikan
                 </button>
             </div>
             <div class="modal-actions" style="margin-top: 8px;">
                 <button class="btn btn-primary" style="flex: 1;" ${soldOut ? 'disabled' : ''} onclick="addToCart(${p.id}); ${soldOut ? '' : "closeModal('productModal');"}">
-                    ${soldOut ? '😢 Stok Habis' : '🛒 + Keranjang'}
+                    ${soldOut ? 'Stok Habis' : icon('cart', 'svg-ic') + ' + Keranjang'}
                 </button>
             </div>
             <div style="margin-top: 10px;">
                 <a href="https://wa.me/${SHOP_INFO.phone}?text=${encodeURIComponent('Halo kak, saya mau tanya: ' + p.name)}"
                    target="_blank" class="btn btn-wa btn-full">
-                    💬 Tanya Penjual
+                    ${icon('whatsapp', 'svg-ic')} Tanya Penjual
                 </a>
             </div>
 
             ${relatedHTML ? `
             <div class="related-section">
-                <h3 class="related-title">✨ Produk Serupa</h3>
+                <h3 class="related-title">${icon('sparkle', 'svg-ic')} Produk Serupa</h3>
                 <div class="related-grid">${relatedHTML}</div>
             </div>
             ` : ''}
 
             <div class="reviews-section">
-                <h3 class="reviews-title">💬 Ulasan Pembeli (${reviewCount})</h3>
+                <h3 class="reviews-title">${icon('chat', 'svg-ic')} Ulasan Pembeli (${reviewCount})</h3>
                 <div class="reviews-list">${reviewsHTML}</div>
                 <button class="btn btn-secondary btn-full" style="margin-top: 12px;" onclick="openReviewForm(${p.id})">
-                    ✍️ Tulis Ulasan
+                    ${icon('pencil', 'svg-ic')} Tulis Ulasan
                 </button>
             </div>
         </div>
@@ -300,7 +304,7 @@ const openReviewForm = (productId) => {
             <button class="btn btn-secondary" style="margin-bottom: 16px;" onclick="openProduct(${productId})">
                 ← Kembali ke ${p.name}
             </button>
-            <h2 class="modal-name" style="margin-bottom: 8px;">✍️ Tulis Ulasan</h2>
+            <h2 class="modal-name" style="margin-bottom: 8px;">${icon('pencil', 'svg-ic')} Tulis Ulasan</h2>
             <p class="modal-desc" style="margin-bottom: 20px;">Bagikan pengalamanmu tentang produk ini.</p>
 
             <form id="reviewForm" class="checkout-form">
@@ -311,11 +315,11 @@ const openReviewForm = (productId) => {
                 <div class="form-row">
                     <label>Rating *</label>
                     <div class="star-picker" id="starPicker">
-                        <span class="star" data-value="1">⭐</span>
-                        <span class="star" data-value="2">⭐</span>
-                        <span class="star" data-value="3">⭐</span>
-                        <span class="star" data-value="4">⭐</span>
-                        <span class="star" data-value="5">⭐</span>
+                        <span class="star" data-value="1">${icon('star', 'svg-ic')}</span>
+                        <span class="star" data-value="2">${icon('star', 'svg-ic')}</span>
+                        <span class="star" data-value="3">${icon('star', 'svg-ic')}</span>
+                        <span class="star" data-value="4">${icon('star', 'svg-ic')}</span>
+                        <span class="star" data-value="5">${icon('star', 'svg-ic')}</span>
                     </div>
                 </div>
                 <div class="form-row">
@@ -324,7 +328,7 @@ const openReviewForm = (productId) => {
                 </div>
                 <div class="checkout-actions">
                     <button type="button" class="btn btn-secondary" onclick="openProduct(${productId})">Batal</button>
-                    <button type="submit" class="btn btn-primary">💾 Kirim Ulasan</button>
+                    <button type="submit" class="btn btn-primary">${icon('check', 'svg-ic')} Kirim Ulasan</button>
                 </div>
             </form>
         </div>
@@ -362,7 +366,7 @@ const openReviewForm = (productId) => {
         });
         localStorage.setItem('sugarcloset_reviews', JSON.stringify(reviews));
 
-        showToast('🌟 Ulasan terkirim! Terima kasih');
+        showToast(icon('star', 'svg-ic star-gold') + ' Ulasan terkirim! Terima kasih');
         renderProducts();
         openProduct(productId);
     });
@@ -373,13 +377,16 @@ const shareProduct = async (id) => {
     const p = PRODUCTS.find(x => x.id === id);
     if (!p) return;
     const url = window.location.origin + window.location.pathname + '#product-' + id;
-    const text = `🛍️ ${p.name}\n💰 ${formatRupiah(p.price)}\n\nLihat di Sugarcloset:\n${url}`;
+    const text = `${p.name} - ${formatRupiah(p.price)}
+
+Lihat di Sugarcloset:
+${url}`;
     if (navigator.share) {
         try { await navigator.share({ title: p.name, text, url }); return; } catch (e) {}
     }
     try {
         await navigator.clipboard.writeText(text);
-        showToast('🔗 Link disalin!');
+        showToast(icon('linkIcon', 'svg-ic') + ' Link disalin!');
     } catch (e) {
         prompt('Copy link ini:', text);
     }
@@ -390,12 +397,12 @@ const toggleFav = (id, btn) => {
     const idx = favorites.indexOf(id);
     if (idx > -1) {
         favorites.splice(idx, 1);
-        if (btn) { btn.textContent = '🤍'; btn.classList.remove('active'); }
-        showToast('💔 Dihapus dari favorit');
+        if (btn) { btn.innerHTML = icon('heartOutline', 'svg-ic'); btn.classList.remove('active'); }
+        showToast(icon('heartOutline', 'svg-ic') + ' Dihapus dari favorit');
     } else {
         favorites.push(id);
-        if (btn) { btn.textContent = '💖'; btn.classList.add('active'); }
-        showToast('💖 Ditambahkan ke favorit');
+        if (btn) { btn.innerHTML = icon('heart', 'svg-ic'); btn.classList.add('active'); }
+        showToast(icon('heart', 'svg-ic') + ' Ditambahkan ke favorit');
     }
     saveFavs();
     updateBadges();
@@ -403,8 +410,8 @@ const toggleFav = (id, btn) => {
 
 const toggleFavFromModal = (id) => {
     const idx = favorites.indexOf(id);
-    if (idx > -1) { favorites.splice(idx, 1); showToast('💔 Dihapus'); }
-    else { favorites.push(id); showToast('💖 Ditambahkan'); }
+    if (idx > -1) { favorites.splice(idx, 1); showToast(icon('heartOutline', 'svg-ic') + ' Dihapus'); }
+    else { favorites.push(id); showToast(icon('heart', 'svg-ic') + ' Ditambahkan'); }
     saveFavs();
     updateBadges();
     renderProducts();
@@ -424,15 +431,15 @@ const cleanCart = () => {
 const addToCart = (id) => {
     const p = PRODUCTS.find(x => x.id === id);
     if (!p) return;
-    if ((p.stock || 0) < 1) { showToast('😢 Yah, stoknya habis!'); return; }
+    if ((p.stock || 0) < 1) { showToast(icon('box', 'svg-ic') + ' Yah, stoknya habis!'); return; }
     const ex = cart.find(x => x.id === id);
     const cur = ex ? (ex.qty || 1) : 0;
-    if (cur + 1 > p.stock) { showToast(`😢 Stok cuma ${p.stock}, tidak bisa tambah lagi`); return; }
+    if (cur + 1 > p.stock) { showToast(icon('box', 'svg-ic') + ` Stok cuma ${p.stock}, tidak bisa tambah lagi`); return; }
     if (ex) ex.qty = cur + 1;
     else cart.push({ id, qty: 1 });
     saveCart();
     updateBadges();
-    showToast('🛒 Ditambahkan ke keranjang!');
+    showToast(icon('cart', 'svg-ic') + ' Ditambahkan ke keranjang!');
 };
 
 const removeFromCart = (id) => {
@@ -440,7 +447,7 @@ const removeFromCart = (id) => {
     saveCart();
     updateBadges();
     renderCart();
-    showToast('🗑️ Dihapus dari keranjang');
+    showToast(icon('trash', 'svg-ic') + ' Dihapus dari keranjang');
 };
 
 const changeQty = (id, delta) => {
@@ -449,7 +456,7 @@ const changeQty = (id, delta) => {
     const p = PRODUCTS.find(x => x.id === id);
     const next = (item.qty || 1) + delta;
     if (delta > 0 && p && next > (p.stock || 0)) {
-        showToast(`😢 Stok cuma ${p.stock}, tidak bisa tambah lagi`);
+        showToast(icon('box', 'svg-ic') + ` Stok cuma ${p.stock}, tidak bisa tambah lagi`);
         return;
     }
     item.qty = next;
@@ -467,7 +474,7 @@ const renderCart = () => {
     if (cart.length === 0) {
         c.innerHTML = `
             <div class="cart-empty">
-                <div class="cart-empty-icon">🛒</div>
+                <div class="cart-empty-icon">${icon('cart', 'svg-ic')}</div>
                 <p>Keranjangmu masih kosong</p>
                 <p style="font-size:12px; margin-top:6px;">Yuk pilih barang cantik dulu~</p>
             </div>`;
@@ -483,7 +490,7 @@ const renderCart = () => {
         return `
             <div class="cart-item">
                 <div class="cart-item-img" style="background: ${p.color}60;">
-                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : productPlaceholder(p.category)}
                 </div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${escapeHTML(p.name)}</div>
@@ -494,7 +501,7 @@ const renderCart = () => {
                     <span class="qty-value">${qty}</span>
                     <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
                 </div>
-                <button class="cart-item-remove" onclick="removeFromCart(${p.id})">🗑️</button>
+                <button class="cart-item-remove" onclick="removeFromCart(${p.id})">${icon('trash', 'svg-ic')}</button>
             </div>`;
     }).join('');
     t.textContent = formatRupiah(total);
@@ -502,7 +509,7 @@ const renderCart = () => {
 
 // ─── Checkout ───
 const openCheckoutForm = () => {
-    if (cart.length === 0) { showToast('🛒 Keranjang masih kosong!'); return; }
+    if (cart.length === 0) { showToast(icon('cart', 'svg-ic') + ' Keranjang masih kosong!'); return; }
     closeModal('cartModal');
     let total = 0, itemCount = 0;
     cart.forEach(item => {
@@ -528,7 +535,7 @@ const submitCheckout = (e) => {
     const phone = document.getElementById('cPhone').value.trim();
     const address = document.getElementById('cAddress').value.trim();
     const notes = document.getElementById('cNotes').value.trim();
-    if (!name || !phone || !address) { showToast('⚠️ Lengkapi data!'); return; }
+    if (!name || !phone || !address) { showToast(icon('warning', 'svg-ic') + ' Lengkapi data!'); return; }
     localStorage.setItem('sugarcloset_buyer', JSON.stringify({ name, phone, address }));
     let msg = 'Halo kak! Saya mau pesan:\n\n';
     let total = 0;
@@ -540,11 +547,11 @@ const submitCheckout = (e) => {
             total += p.price * qty;
         }
     });
-    msg += `💰 *Total: ${formatRupiah(total)}*\n\n`;
-    msg += '📦 *DATA PENGIRIMAN*\n';
+    msg += `*Total: ${formatRupiah(total)}*\n\n`;
+    msg += '*DATA PENGIRIMAN*\n';
     msg += `Nama: ${name}\nNo. WA: ${phone}\nAlamat: ${address}\n`;
-    if (notes) msg += `\n📝 Catatan: ${notes}`;
-    msg += '\n\nMohon konfirmasi ketersediaan ya, terima kasih! 🌸';
+    if (notes) msg += `\nCatatan: ${notes}`;
+    msg += '\n\nMohon konfirmasi ketersediaan ya, terima kasih!';
     window.open(`https://wa.me/${SHOP_INFO.phone}?text=${encodeURIComponent(msg)}`, '_blank');
     closeModal('checkoutModal');
     // Kosongkan keranjang setelah pesanan dikirim — cegah double order
@@ -552,7 +559,7 @@ const submitCheckout = (e) => {
     saveCart();
     updateBadges();
     renderCart();
-    showToast('💌 Pesanan dikirim ke WhatsApp!');
+    showToast(icon('mail', 'svg-ic') + ' Pesanan dikirim ke WhatsApp!');
 };
 
 // ─── Badges ───
@@ -568,9 +575,9 @@ const renderFavModal = () => {
     if (favorites.length === 0) {
         c.innerHTML = `
             <div class="cart-empty">
-                <div class="cart-empty-icon">💔</div>
+                <div class="cart-empty-icon">${icon('heartOutline', 'svg-ic')}</div>
                 <p>Belum ada favorit</p>
-                <p style="font-size:12px; margin-top:6px;">Tap 🤍 di produk untuk simpan~</p>
+                <p style="font-size:12px; margin-top:6px;">Tap ${icon('heartOutline', 'svg-ic')} di produk untuk simpan~</p>
             </div>`;
         return;
     }
@@ -580,13 +587,13 @@ const renderFavModal = () => {
         return `
             <div class="cart-item">
                 <div class="cart-item-img" style="background: ${p.color}60;">
-                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : productPlaceholder(p.category)}
                 </div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${escapeHTML(p.name)}</div>
                     <div class="cart-item-price">${formatRupiah(p.price)}</div>
                 </div>
-                <button class="cart-item-remove" onclick="toggleFav(${p.id}); renderFavModal(); renderProducts();">💔</button>
+                <button class="cart-item-remove" onclick="toggleFav(${p.id}); renderFavModal(); renderProducts();">${icon('trash', 'svg-ic')}</button>
             </div>`;
     }).join('');
 };
@@ -623,7 +630,7 @@ const initPromoBanner = () => {
                 updateHeaderOffset();
             }, 300);
             localStorage.setItem('sugarcloset_promo_dismissed', 'true');
-            showToast('👍 Promo disembunyikan');
+            showToast(icon('check', 'svg-ic') + ' Promo disembunyikan');
         });
     }
 };
@@ -642,7 +649,7 @@ const renderTestimonials = () => {
     const grid = document.getElementById('testimonialGrid');
     if (!grid || typeof TESTIMONIALS === 'undefined') return;
     grid.innerHTML = TESTIMONIALS.map((t, i) => {
-        const stars = '⭐'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+        const stars = icon('star', 'svg-ic star-gold').repeat(t.rating) + icon('starOutline', 'svg-ic star-dim').repeat(5 - t.rating);
         return `
             <div class="testimonial-card" style="animation-delay: ${i * 0.06}s">
                 <div class="testimonial-header">
@@ -654,7 +661,7 @@ const renderTestimonials = () => {
                 </div>
                 <div class="testimonial-stars">${stars}</div>
                 <p class="testimonial-text">"${t.text}"</p>
-                <div class="testimonial-product">📦 ${t.product}</div>
+                <div class="testimonial-product">${icon('box', 'svg-ic')} ${t.product}</div>
             </div>
         `;
     }).join('');
@@ -765,6 +772,17 @@ const initEvents = () => {
     });
 };
 
+// ─── Icon Hydration ───
+// Ubah <span data-icon="nama"> di HTML statis menjadi SVG dari icons.js
+const hydrateIcons = (root = document) => {
+    root.querySelectorAll('[data-icon]').forEach(el => {
+        if (!el.dataset.done) {
+            el.innerHTML = icon(el.dataset.icon, 'svg-ic');
+            el.dataset.done = '1';
+        }
+    });
+};
+
 // ─── Deep Link ───
 // Buka modal produk langsung dari URL seperti .../index.html#product-3
 // (dipakai oleh tombol "Bagikan")
@@ -795,6 +813,7 @@ window.applySearchHistory = applySearchHistory;
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
+    hydrateIcons();
     initPromoBanner();
     initFloatingHearts();
     initEvents();
@@ -806,5 +825,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFAQ();
     handleDeepLink();
     window.addEventListener('hashchange', handleDeepLink);
-    console.log('🎀 Sugarcloset loaded (Paket D — Full Features)');
+    console.log('Sugarcloset loaded (Paket D — Full Features)');
 });
