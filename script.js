@@ -653,7 +653,7 @@ const renderTestimonials = () => {
         return `
             <div class="testimonial-card" style="animation-delay: ${i * 0.06}s">
                 <div class="testimonial-header">
-                    <div class="testimonial-avatar" style="background: ${t.color}60;">${t.avatar}</div>
+                    <div class="testimonial-avatar" style="background: ${t.color}60;">${icon(t.avatar, 'svg-ic')}</div>
                     <div class="testimonial-info">
                         <div class="testimonial-name">${t.name}</div>
                         <div class="testimonial-date">${t.date}</div>
