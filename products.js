@@ -3,18 +3,18 @@
 // ═══════════════════════════════════════════
 
 const DEFAULT_PRODUCTS = [
-    { id: 1, image: "images/produk-1.jpg", name: "Tas Vintage Pink Pastel", price: 125000, originalPrice: 350000, category: "tas", condition: "Mulus 9.5/10", emoji: "👜", color: "#FFB6D9", desc: "Tas vintage lucu dengan warna pink pastel. Kondisi masih sangat bagus, kulit tebal, zip aman. Cocok untuk jalan santai atau ke kampus.", seller: "Kak Ayu", stock: 1, rating: 5, sold: 12, tags: ["vintage", "pink", "tas"] },
-    { id: 2, image: "images/produk-2.jpg", name: "Dress Floral Korea Style", price: 89000, originalPrice: 250000, category: "fashion", condition: "Mulus 9/10", emoji: "👗", color: "#C5B3FF", desc: "Dress bunga ala Korea, bahan adem, ukuran M. Cocok untuk hangout atau date.", seller: "Kak Rina", stock: 1, rating: 5, sold: 8, tags: ["dress", "floral", "korea"] },
-    { id: 3, image: "images/produk-3.jpg", name: "Sneakers White Clean", price: 175000, originalPrice: 500000, category: "sepatu", condition: "Mulus 9/10", emoji: "👟", color: "#B3E5FC", desc: "Sneakers putih kekinian, baru dicuci bersih. Size 39. Nyaman untuk daily.", seller: "Kak Dita", stock: 1, rating: 4, sold: 15, tags: ["sneakers", "white", "sepatu"] },
-    { id: 4, image: "images/produk-4.jpg", name: "Kalung Choker Bunga", price: 35000, originalPrice: 75000, category: "aksesoris", condition: "Baru 10/10", emoji: "💍", color: "#FFD9E8", desc: "Choker bunga manis, baru, belum pernah dipakai. Cocok buat menambah cuteness.", seller: "Kak Lily", stock: 3, rating: 5, sold: 25, tags: ["choker", "bunga", "kalung"] },
-    { id: 5, image: "images/produk-5.jpg", name: "Novel Romantis Preloved", price: 45000, originalPrice: 120000, category: "buku", condition: "Baik 8.5/10", emoji: "📚", color: "#FFE4B3", desc: "Novel romantis best seller. Kondisi bagus, tidak ada halaman hilang. Covernya cantik.", seller: "Kak Sarah", stock: 1, rating: 4, sold: 6, tags: ["novel", "romantis", "buku"] },
-    { id: 6, image: "images/produk-6.jpg", name: "Headphone Cute Edition", price: 210000, originalPrice: 550000, category: "elektronik", condition: "Mulus 9/10", emoji: "🎧", color: "#B3FFD9", desc: "Headphone warna pastel lucu, suara jernih, masih bergaransi.", seller: "Kak Mia", stock: 1, rating: 5, sold: 20, tags: ["headphone", "audio", "elektronik"] },
-    { id: 7, image: "images/produk-7.jpg", name: "Rok Plisket Peach", price: 65000, originalPrice: 180000, category: "fashion", condition: "Mulus 9/10", emoji: "🩱", color: "#FFC9A8", desc: "Rok plisket warna peach cantik, bahan flowy, ukuran all size.", seller: "Kak Nana", stock: 2, rating: 5, sold: 18, tags: ["rok", "plisket"] },
-    { id: 8, image: "images/produk-8.jpg", name: "Tote Bag Kanvas Lucu", price: 55000, originalPrice: 150000, category: "tas", condition: "Mulus 9/10", emoji: "🛍️", color: "#FFD9F2", desc: "Tote bag kanvas dengan desain lucu. Muat banyak barang.", seller: "Kak Vira", stock: 1, rating: 4, sold: 10, tags: ["tote", "kanvas"] },
-    { id: 9, image: "images/produk-9.jpg", name: "Gelang Manik Warna-warni", price: 25000, originalPrice: 60000, category: "aksesoris", condition: "Baru 10/10", emoji: "📿", color: "#E8B3FF", desc: "Gelang manik warna-warni, handmade. Bisa custom warna.", seller: "Kak Ayu", stock: 5, rating: 5, sold: 30, tags: ["gelang", "manik"] },
-    { id: 10, image: "images/produk-10.jpg", name: "Kemeja Oversize Cream", price: 95000, originalPrice: 280000, category: "fashion", condition: "Mulus 9/10", emoji: "👚", color: "#FFE9B3", desc: "Kemeja oversize warna cream, bahan katun premium. Ukuran L.", seller: "Kak Sinta", stock: 1, rating: 5, sold: 14, tags: ["kemeja", "oversize"] },
-    { id: 11, image: "images/produk-11.jpg", name: "Sepatu Flat Mary Jane", price: 145000, originalPrice: 400000, category: "sepatu", condition: "Mulus 9/10", emoji: "🥿", color: "#FFB3BA", desc: "Flat shoes mary jane yang manis. Size 38. Nyaman untuk acara formal.", seller: "Kak Dewi", stock: 1, rating: 5, sold: 7, tags: ["flat", "mary jane"] },
-    { id: 12, image: "images/produk-12.jpg", name: "Buku Puisi Cinta", price: 38000, originalPrice: 90000, category: "buku", condition: "Mulus 9/10", emoji: "📖", color: "#FFCCE5", desc: "Kumpulan puisi cinta yang manis. Cocok untuk hadiah atau koleksi.", seller: "Kak Rara", stock: 1, rating: 5, sold: 5, tags: ["puisi", "cinta"] }
+    { id: 1, image: "images/produk-1.jpg", name: "Tas Vintage Pink Pastel", price: 125000, originalPrice: 350000, category: "tas", condition: "Mulus 9.5/10", color: "#FFB6D9", desc: "Tas vintage lucu dengan warna pink pastel. Kondisi masih sangat bagus, kulit tebal, zip aman. Cocok untuk jalan santai atau ke kampus.", seller: "Kak Ayu", stock: 1, rating: 5, sold: 12, tags: ["vintage", "pink", "tas"] },
+    { id: 2, image: "images/produk-2.jpg", name: "Dress Floral Korea Style", price: 89000, originalPrice: 250000, category: "fashion", condition: "Mulus 9/10", color: "#C5B3FF", desc: "Dress bunga ala Korea, bahan adem, ukuran M. Cocok untuk hangout atau date.", seller: "Kak Rina", stock: 1, rating: 5, sold: 8, tags: ["dress", "floral", "korea"] },
+    { id: 3, image: "images/produk-3.jpg", name: "Sneakers White Clean", price: 175000, originalPrice: 500000, category: "sepatu", condition: "Mulus 9/10", color: "#B3E5FC", desc: "Sneakers putih kekinian, baru dicuci bersih. Size 39. Nyaman untuk daily.", seller: "Kak Dita", stock: 1, rating: 4, sold: 15, tags: ["sneakers", "white", "sepatu"] },
+    { id: 4, image: "images/produk-4.jpg", name: "Kalung Choker Bunga", price: 35000, originalPrice: 75000, category: "aksesoris", condition: "Baru 10/10", color: "#FFD9E8", desc: "Choker bunga manis, baru, belum pernah dipakai. Cocok buat menambah cuteness.", seller: "Kak Lily", stock: 3, rating: 5, sold: 25, tags: ["choker", "bunga", "kalung"] },
+    { id: 5, image: "images/produk-5.jpg", name: "Novel Romantis Preloved", price: 45000, originalPrice: 120000, category: "buku", condition: "Baik 8.5/10", color: "#FFE4B3", desc: "Novel romantis best seller. Kondisi bagus, tidak ada halaman hilang. Covernya cantik.", seller: "Kak Sarah", stock: 1, rating: 4, sold: 6, tags: ["novel", "romantis", "buku"] },
+    { id: 6, image: "images/produk-6.jpg", name: "Headphone Cute Edition", price: 210000, originalPrice: 550000, category: "elektronik", condition: "Mulus 9/10", color: "#B3FFD9", desc: "Headphone warna pastel lucu, suara jernih, masih bergaransi.", seller: "Kak Mia", stock: 1, rating: 5, sold: 20, tags: ["headphone", "audio", "elektronik"] },
+    { id: 7, image: "images/produk-7.jpg", name: "Rok Plisket Peach", price: 65000, originalPrice: 180000, category: "fashion", condition: "Mulus 9/10", color: "#FFC9A8", desc: "Rok plisket warna peach cantik, bahan flowy, ukuran all size.", seller: "Kak Nana", stock: 2, rating: 5, sold: 18, tags: ["rok", "plisket"] },
+    { id: 8, image: "images/produk-8.jpg", name: "Tote Bag Kanvas Lucu", price: 55000, originalPrice: 150000, category: "tas", condition: "Mulus 9/10", color: "#FFD9F2", desc: "Tote bag kanvas dengan desain lucu. Muat banyak barang.", seller: "Kak Vira", stock: 1, rating: 4, sold: 10, tags: ["tote", "kanvas"] },
+    { id: 9, image: "images/produk-9.jpg", name: "Gelang Manik Warna-warni", price: 25000, originalPrice: 60000, category: "aksesoris", condition: "Baru 10/10", color: "#E8B3FF", desc: "Gelang manik warna-warni, handmade. Bisa custom warna.", seller: "Kak Ayu", stock: 5, rating: 5, sold: 30, tags: ["gelang", "manik"] },
+    { id: 10, image: "images/produk-10.jpg", name: "Kemeja Oversize Cream", price: 95000, originalPrice: 280000, category: "fashion", condition: "Mulus 9/10", color: "#FFE9B3", desc: "Kemeja oversize warna cream, bahan katun premium. Ukuran L.", seller: "Kak Sinta", stock: 1, rating: 5, sold: 14, tags: ["kemeja", "oversize"] },
+    { id: 11, image: "images/produk-11.jpg", name: "Sepatu Flat Mary Jane", price: 145000, originalPrice: 400000, category: "sepatu", condition: "Mulus 9/10", color: "#FFB3BA", desc: "Flat shoes mary jane yang manis. Size 38. Nyaman untuk acara formal.", seller: "Kak Dewi", stock: 1, rating: 5, sold: 7, tags: ["flat", "mary jane"] },
+    { id: 12, image: "images/produk-12.jpg", name: "Buku Puisi Cinta", price: 38000, originalPrice: 90000, category: "buku", condition: "Mulus 9/10", color: "#FFCCE5", desc: "Kumpulan puisi cinta yang manis. Cocok untuk hadiah atau koleksi.", seller: "Kak Rara", stock: 1, rating: 5, sold: 5, tags: ["puisi", "cinta"] }
 ];
 
 const STORED = localStorage.getItem('sugarcloset_products_v2');
@@ -35,16 +35,16 @@ const SHOP_INFO = {
 const TESTIMONIALS = [
     {
         name: "Rina A.",
-        avatar: "🌸",
+        avatar: "flower",
         color: "#FFB6D9",
         rating: 5,
-        text: "Barangnya persis seperti foto, malah lebih cantik! Packing rapi banget, ada bonus stiker lucu. Recommended banget kakaknya 🥰",
+        text: "Barangnya persis seperti foto, malah lebih cantik! Packing rapi banget, ada bonus stiker lucu. Recommended banget kakaknya!",
         date: "2 minggu lalu",
         product: "Tas Vintage Pink"
     },
     {
         name: "Sinta D.",
-        avatar: "💕",
+        avatar: "heart",
         color: "#C5B3FF",
         rating: 5,
         text: "Fast respon, ramah, dan sabar jawab pertanyaan. Dressnya masih mulus banget kayak baru. Pasti repeat order!",
@@ -53,7 +53,7 @@ const TESTIMONIALS = [
     },
     {
         name: "Mia K.",
-        avatar: "✨",
+        avatar: "sparkle",
         color: "#B3FFD9",
         rating: 5,
         text: "Udah langganan di sini. Harga ramah, kualitas oke. Kemarin beli headphone, suaranya jernih banget. Thank you kak!",
@@ -62,7 +62,7 @@ const TESTIMONIALS = [
     },
     {
         name: "Dewi P.",
-        avatar: "🌷",
+        avatar: "leaf",
         color: "#FFC9A8",
         rating: 4,
         text: "Sepatunya nyaman banget dipakai. Cuma agak lecet dikit di bagian belakang, tapi udah diinfokan dari awal jadi ga masalah.",
@@ -71,16 +71,16 @@ const TESTIMONIALS = [
     },
     {
         name: "Nana R.",
-        avatar: "🦋",
+        avatar: "rainbow",
         color: "#FFE9B3",
         rating: 5,
-        text: "Pelayanan top! Dikirim hari yang sama, sampai dengan aman. Rok plisketnya cantik banget sesuai deskripsi 💖",
+        text: "Pelayanan top! Dikirim hari yang sama, sampai dengan aman. Rok plisketnya cantik banget sesuai deskripsi!",
         date: "5 hari lalu",
         product: "Rok Plisket Peach"
     },
     {
         name: "Lily H.",
-        avatar: "🌈",
+        avatar: "star",
         color: "#FFD9F2",
         rating: 5,
         text: "Choker bunganya manis banget, cocok dipake daily. Harganya juga ramah untuk kantong pelajar. Makasih ya kak!",
