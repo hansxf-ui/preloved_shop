@@ -2236,3 +2236,89 @@ img, svg { max-width: 100%; height: auto; }
     cursor: not-allowed;
     transform: none !important;
 }
+
+/* ═══════════════════════════════════════════
+   SVG ICONS (pengganti emoji)
+   ═══════════════════════════════════════════ */
+.svg-ic {
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: -0.2em;
+    flex: none;
+    display: inline-block;
+}
+
+/* Warna bintang */
+.star-gold { color: #FFB300; }
+.star-dim { color: #D8DCE3; }
+
+/* Logo & header */
+.logo-icon .svg-ic { width: 26px; height: 26px; color: var(--pink); }
+.icon-btn .svg-ic { width: 22px; height: 22px; }
+
+/* Tombol favorit (love) */
+.fav-toggle { color: #B9BEC7; }
+.fav-toggle .svg-ic { width: 20px; height: 20px; }
+.fav-toggle.active { color: #FF5C8A; }
+
+/* Hero */
+.hero-card .svg-ic { width: 58px; height: 58px; color: var(--pink); }
+.hero-badge .svg-ic { width: 15px; height: 15px; }
+
+/* Marquee */
+.marquee .svg-ic { width: 16px; height: 16px; color: var(--pink); }
+
+/* Section badge & sort */
+.section-badge .svg-ic { width: 16px; height: 16px; }
+.custom-select-option .svg-ic, #sortLabel .svg-ic { width: 15px; height: 15px; }
+
+/* Kategori */
+.cat-btn .svg-ic { width: 18px; height: 18px; }
+
+/* Search */
+.search-icon .svg-ic { width: 18px; height: 18px; color: #9AA0AA; }
+.history-icon .svg-ic { width: 14px; height: 14px; color: #9AA0AA; }
+
+/* Empty states */
+.empty-icon .svg-ic { width: 60px; height: 60px; color: #C9CFD8; }
+.cart-empty-icon .svg-ic { width: 52px; height: 52px; color: #C9CFD8; }
+
+/* About */
+.about-icon .svg-ic { width: 40px; height: 40px; color: var(--pink); }
+.contact-emoji .svg-ic { width: 44px; height: 44px; color: var(--pink); }
+
+/* Produk */
+.product-meta .svg-ic { width: 13px; height: 13px; color: #9AA0AA; }
+.review-stars .svg-ic, .modal-stars .svg-ic { width: 15px; height: 15px; }
+.testimonial-product .svg-ic { width: 14px; height: 14px; color: #9AA0AA; }
+.ph-icon { width: 64px; height: 64px; color: var(--pink); opacity: 0.7; }
+.product-card:hover .ph-icon { transform: scale(1.12); }
+
+/* Star picker (input rating) */
+.star-picker .star { color: #FFB300; }
+.star-picker .star .svg-ic { width: 32px; height: 32px; }
+.star-picker .star.dim { color: #D8DCE3; }
+
+/* Modal & tombol */
+.modal-close .svg-ic, .promo-close .svg-ic { width: 18px; height: 18px; }
+.modal-title .svg-ic { width: 22px; height: 22px; color: var(--pink); }
+.cart-item-remove .svg-ic { width: 17px; height: 17px; }
+.btn .svg-ic { width: 17px; height: 17px; }
+
+/* Toast */
+.toast .svg-ic { width: 18px; height: 18px; color: var(--pink-dark); }
+
+/* Promo & footer */
+.promo-fire .svg-ic { width: 18px; height: 18px; color: #FF6B35; }
+.footer-copy .svg-ic { width: 14px; height: 14px; color: #FF5C8A; }
+.wa-float-tooltip .svg-ic { width: 15px; height: 15px; color: #25D366; }
+
+/* Floating hearts (sekarang SVG) */
+#floatingHearts span { display: inline-block; }
+#floatingHearts span .svg-ic { width: 100%; height: 100%; }
+
+/* Mobile */
+@media (max-width: 640px) {
+    .hero-card .svg-ic { width: 46px; height: 46px; }
+    .star-picker .star .svg-ic { width: 28px; height: 28px; }
+}
