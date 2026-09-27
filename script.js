@@ -13,6 +13,11 @@ let searchHistory = JSON.parse(localStorage.getItem('sugarcloset_search_history'
 // ─── Helpers ───
 const formatRupiah = (num) => 'Rp ' + num.toLocaleString('id-ID');
 
+// Escape HTML untuk mencegah XSS dari data produk/ulasan/pencarian
+const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[c]));
+
 const showToast = (msg) => {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
@@ -66,13 +71,16 @@ const renderSearchHistory = () => {
             <button class="history-clear" id="historyClear">Hapus</button>
         </div>
         ${searchHistory.map(q => `
-            <div class="history-item" onclick="applySearchHistory('${q.replace(/'/g, "\\'")}')">
+            <div class="history-item" data-q="${escapeHTML(q)}">
                 <span class="history-icon">🔍</span>
-                <span>${q}</span>
+                <span>${escapeHTML(q)}</span>
             </div>
         `).join('')}
     `;
     el.classList.add('show');
+    el.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', () => applySearchHistory(item.dataset.q));
+    });
     const clear = document.getElementById('historyClear');
     if (clear) clear.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -127,35 +135,38 @@ const renderProducts = () => {
     grid.innerHTML = products.map((p, i) => {
         const discount = Math.round((1 - p.price / p.originalPrice) * 100);
         const isFav = favorites.includes(p.id);
+        const soldOut = (p.stock || 0) < 1;
         const ratingData = getProductRating(p.id);
         const ratingDisplay = ratingData
             ? `${ratingData.avg} (${ratingData.count})`
             : `${p.rating}`;
         const imageHTML = p.image
-            ? `<img src="${p.image}" alt="${p.name}" class="product-photo">`
+            ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" class="product-photo" loading="lazy">`
             : `<span class="product-emoji">${p.emoji}</span>`;
         return `
-            <div class="product-card" style="animation-delay: ${i * 0.04}s" onclick="openProduct(${p.id})">
+            <div class="product-card ${soldOut ? 'is-soldout' : ''}" style="animation-delay: ${i * 0.04}s" onclick="openProduct(${p.id})">
                 <div class="product-image" style="background: linear-gradient(135deg, ${p.color}40, ${p.color}80);">
                     ${imageHTML}
-                    <div class="product-badge">-${discount}%</div>
+                    ${soldOut
+                        ? `<div class="product-badge soldout">Stok Habis</div>`
+                        : `<div class="product-badge">-${discount}%</div>`}
                     <button class="fav-toggle ${isFav ? 'active' : ''}"
                             onclick="event.stopPropagation(); toggleFav(${p.id}, this)">
                         ${isFav ? '💖' : '🤍'}
                     </button>
                 </div>
                 <div class="product-info">
-                    <div class="product-name">${p.name}</div>
+                    <div class="product-name">${escapeHTML(p.name)}</div>
                     <div class="product-price-row">
                         <span class="product-price">${formatRupiah(p.price)}</span>
                         <span class="product-original">${formatRupiah(p.originalPrice)}</span>
                     </div>
                     <div class="product-meta">
-                        <span>👤 ${p.seller}</span>
+                        <span>👤 ${escapeHTML(p.seller)}</span>
                         <span>⭐ ${ratingDisplay}</span>
                     </div>
-                    <button class="product-add" onclick="event.stopPropagation(); addToCart(${p.id})">
-                        🛒 + Keranjang
+                    <button class="product-add" ${soldOut ? 'disabled' : ''} onclick="event.stopPropagation(); addToCart(${p.id})">
+                        ${soldOut ? '😢 Stok Habis' : '🛒 + Keranjang'}
                     </button>
                 </div>
             </div>
@@ -169,8 +180,9 @@ const openProduct = (id) => {
     if (!p) return;
     const discount = Math.round((1 - p.price / p.originalPrice) * 100);
     const isFav = favorites.includes(p.id);
+    const soldOut = (p.stock || 0) < 1;
     const modalImage = p.image
-        ? `<img src="${p.image}" alt="${p.name}" class="modal-photo">`
+        ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" class="modal-photo">`
         : p.emoji;
 
     // Related products — sama kategori, exclude yg ini
@@ -188,11 +200,11 @@ const openProduct = (id) => {
         ? productReviews.map(r => `
             <div class="review-item">
                 <div class="review-head">
-                    <span class="review-name">${r.name}</span>
-                    <span class="review-stars">${'⭐'.repeat(r.rating)}</span>
-                    <span class="review-date">${r.date}</span>
+                    <span class="review-name">${escapeHTML(r.name)}</span>
+                    <span class="review-stars">${'⭐'.repeat(Math.min(5, Math.max(1, r.rating | 0)))}</span>
+                    <span class="review-date">${escapeHTML(r.date)}</span>
                 </div>
-                <p class="review-text">${r.text}</p>
+                <p class="review-text">${escapeHTML(r.text)}</p>
             </div>
         `).join('')
         : `<p class="review-empty">Belum ada ulasan. Jadilah yang pertama! 🌟</p>`;
@@ -201,9 +213,9 @@ const openProduct = (id) => {
         ? related.map(rp => `
             <div class="related-card" onclick="openProduct(${rp.id})">
                 <div class="related-img" style="background: ${rp.color}60;">
-                    ${rp.image ? `<img src="${rp.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : rp.emoji}
+                    ${rp.image ? `<img src="${escapeHTML(rp.image)}" alt="${escapeHTML(rp.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : rp.emoji}
                 </div>
-                <div class="related-name">${rp.name}</div>
+                <div class="related-name">${escapeHTML(rp.name)}</div>
                 <div class="related-price">${formatRupiah(rp.price)}</div>
             </div>
         `).join('')
@@ -214,8 +226,8 @@ const openProduct = (id) => {
             ${modalImage}
         </div>
         <div class="modal-info">
-            <span class="modal-cat">${p.category.toUpperCase()}</span>
-            <h2 class="modal-name">${p.name}</h2>
+            <span class="modal-cat">${escapeHTML(p.category).toUpperCase()}</span>
+            <h2 class="modal-name">${escapeHTML(p.name)}</h2>
 
             <div class="modal-rating-row">
                 <span class="modal-stars">${'⭐'.repeat(Math.round(avgRating))}</span>
@@ -227,11 +239,11 @@ const openProduct = (id) => {
                 <span class="modal-original">${formatRupiah(p.originalPrice)}</span>
                 <span class="modal-discount">-${discount}%</span>
             </div>
-            <p class="modal-desc">${p.desc}</p>
+            <p class="modal-desc">${escapeHTML(p.desc)}</p>
             <div class="modal-meta">
-                <div class="modal-meta-item"><strong>Kondisi</strong>${p.condition}</div>
-                <div class="modal-meta-item"><strong>Stok</strong>${p.stock} tersedia</div>
-                <div class="modal-meta-item"><strong>Penjual</strong>${p.seller}</div>
+                <div class="modal-meta-item"><strong>Kondisi</strong>${escapeHTML(p.condition)}</div>
+                <div class="modal-meta-item"><strong>Stok</strong>${soldOut ? 'Habis 😢' : p.stock + ' tersedia'}</div>
+                <div class="modal-meta-item"><strong>Penjual</strong>${escapeHTML(p.seller)}</div>
                 <div class="modal-meta-item"><strong>Terjual</strong>${p.sold} kali</div>
             </div>
             <div class="modal-actions">
@@ -243,8 +255,8 @@ const openProduct = (id) => {
                 </button>
             </div>
             <div class="modal-actions" style="margin-top: 8px;">
-                <button class="btn btn-primary" style="flex: 1;" onclick="addToCart(${p.id}); closeModal('productModal');">
-                    🛒 + Keranjang
+                <button class="btn btn-primary" style="flex: 1;" ${soldOut ? 'disabled' : ''} onclick="addToCart(${p.id}); ${soldOut ? '' : "closeModal('productModal');"}">
+                    ${soldOut ? '😢 Stok Habis' : '🛒 + Keranjang'}
                 </button>
             </div>
             <div style="margin-top: 10px;">
@@ -273,7 +285,10 @@ const openProduct = (id) => {
     document.getElementById('productModal').classList.add('open');
 };
 
-const closeModal = (id) => document.getElementById(id).classList.remove('open');
+const closeModal = (id) => {
+    document.getElementById(id).classList.remove('open');
+    if (id === 'productModal') clearDeepLink();
+};
 
 // ─── Open Review Form ───
 const openReviewForm = (productId) => {
@@ -399,9 +414,21 @@ const toggleFavFromModal = (id) => {
 const saveFavs = () => localStorage.setItem('sugarcloset_favs', JSON.stringify(favorites));
 
 // ─── Cart ───
+// Buang item keranjang yang produknya sudah tidak ada (mis. dihapus admin)
+const cleanCart = () => {
+    const before = cart.length;
+    cart = cart.filter(x => PRODUCTS.some(p => p.id === x.id));
+    if (cart.length !== before) saveCart();
+};
+
 const addToCart = (id) => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    if ((p.stock || 0) < 1) { showToast('😢 Yah, stoknya habis!'); return; }
     const ex = cart.find(x => x.id === id);
-    if (ex) ex.qty = (ex.qty || 1) + 1;
+    const cur = ex ? (ex.qty || 1) : 0;
+    if (cur + 1 > p.stock) { showToast(`😢 Stok cuma ${p.stock}, tidak bisa tambah lagi`); return; }
+    if (ex) ex.qty = cur + 1;
     else cart.push({ id, qty: 1 });
     saveCart();
     updateBadges();
@@ -419,7 +446,13 @@ const removeFromCart = (id) => {
 const changeQty = (id, delta) => {
     const item = cart.find(x => x.id === id);
     if (!item) return;
-    item.qty = (item.qty || 1) + delta;
+    const p = PRODUCTS.find(x => x.id === id);
+    const next = (item.qty || 1) + delta;
+    if (delta > 0 && p && next > (p.stock || 0)) {
+        showToast(`😢 Stok cuma ${p.stock}, tidak bisa tambah lagi`);
+        return;
+    }
+    item.qty = next;
     if (item.qty < 1) { removeFromCart(id); return; }
     saveCart();
     updateBadges();
@@ -450,10 +483,10 @@ const renderCart = () => {
         return `
             <div class="cart-item">
                 <div class="cart-item-img" style="background: ${p.color}60;">
-                    ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
                 </div>
                 <div class="cart-item-info">
-                    <div class="cart-item-name">${p.name}</div>
+                    <div class="cart-item-name">${escapeHTML(p.name)}</div>
                     <div class="cart-item-price">${formatRupiah(p.price)} × ${qty}</div>
                 </div>
                 <div class="qty-selector">
@@ -514,6 +547,11 @@ const submitCheckout = (e) => {
     msg += '\n\nMohon konfirmasi ketersediaan ya, terima kasih! 🌸';
     window.open(`https://wa.me/${SHOP_INFO.phone}?text=${encodeURIComponent(msg)}`, '_blank');
     closeModal('checkoutModal');
+    // Kosongkan keranjang setelah pesanan dikirim — cegah double order
+    cart = [];
+    saveCart();
+    updateBadges();
+    renderCart();
     showToast('💌 Pesanan dikirim ke WhatsApp!');
 };
 
@@ -542,10 +580,10 @@ const renderFavModal = () => {
         return `
             <div class="cart-item">
                 <div class="cart-item-img" style="background: ${p.color}60;">
-                    ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
+                    ${p.image ? `<img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">` : p.emoji}
                 </div>
                 <div class="cart-item-info">
-                    <div class="cart-item-name">${p.name}</div>
+                    <div class="cart-item-name">${escapeHTML(p.name)}</div>
                     <div class="cart-item-price">${formatRupiah(p.price)}</div>
                 </div>
                 <button class="cart-item-remove" onclick="toggleFav(${p.id}); renderFavModal(); renderProducts();">💔</button>
@@ -727,6 +765,22 @@ const initEvents = () => {
     });
 };
 
+// ─── Deep Link ───
+// Buka modal produk langsung dari URL seperti .../index.html#product-3
+// (dipakai oleh tombol "Bagikan")
+const handleDeepLink = () => {
+    const m = window.location.hash.match(/^#product-(\d+)$/);
+    if (!m) return;
+    const id = parseInt(m[1], 10);
+    if (PRODUCTS.some(p => p.id === id)) openProduct(id);
+};
+
+const clearDeepLink = () => {
+    if (/^#product-\d+$/.test(window.location.hash)) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+};
+
 // ─── Global ───
 window.changeQty = changeQty;
 window.removeFromCart = removeFromCart;
@@ -745,9 +799,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initFloatingHearts();
     initEvents();
     initBackToTop();
+    cleanCart();
     updateBadges();
     renderProducts();
     renderTestimonials();
     renderFAQ();
+    handleDeepLink();
+    window.addEventListener('hashchange', handleDeepLink);
     console.log('🎀 Sugarcloset loaded (Paket D — Full Features)');
 });
