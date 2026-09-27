@@ -9,17 +9,27 @@ const formatRupiah = (num) => 'Rp ' + num.toLocaleString('id-ID');
 
 const showToast = (msg) => {
     const t = document.getElementById('toast');
-    t.textContent = msg;
+    t.innerHTML = msg;
     t.classList.add('show');
     clearTimeout(window._t);
     window._t = setTimeout(() => t.classList.remove('show'), 2200);
+};
+
+// ─── Icon Hydration ───
+const hydrateIcons = (root = document) => {
+    root.querySelectorAll('[data-icon]').forEach(el => {
+        if (!el.dataset.done) {
+            el.innerHTML = icon(el.dataset.icon, 'svg-ic');
+            el.dataset.done = '1';
+        }
+    });
 };
 
 const saveProducts = () => {
     try {
         localStorage.setItem('sugarcloset_products_v2', JSON.stringify(products));
     } catch (e) {
-        showToast('⚠️ Storage penuh! Kurangi atau kompres foto.');
+        showToast(icon('warning', 'svg-ic') + ' Storage penuh! Kurangi atau kompres foto.');
     }
 };
 
@@ -65,7 +75,7 @@ const setImagePreview = (dataUrl) => {
         preview.innerHTML = `<img src="${dataUrl}" alt="preview">`;
         removeBtn.style.display = 'flex';
     } else {
-        preview.innerHTML = `<span class="image-preview-placeholder">📷 Ketuk untuk pilih foto</span>`;
+        preview.innerHTML = `<span class="image-preview-placeholder">${icon('imageIcon', 'svg-ic')} Ketuk untuk pilih foto</span>`;
         removeBtn.style.display = 'none';
     }
 };
@@ -104,7 +114,7 @@ const renderGrid = (filter = '') => {
     grid.innerHTML = list.map(p => {
         const thumb = p.image
             ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`
-            : p.emoji;
+            : (p.icon ? icon(p.icon, 'svg-ic ph-icon') : productPlaceholder(p.category));
         return `
             <div class="admin-card">
                 <div class="admin-card-img" style="background: ${p.color}60;">${thumb}</div>
@@ -114,8 +124,8 @@ const renderGrid = (filter = '') => {
                     <div class="admin-card-meta">${p.category} · Stok: ${p.stock || 1}</div>
                 </div>
                 <div class="admin-card-actions">
-                    <button class="admin-icon-btn edit" onclick="editProduct(${p.id})" title="Edit">✏️</button>
-                    <button class="admin-icon-btn delete" onclick="confirmDelete(${p.id})" title="Hapus">🗑️</button>
+                    <button class="admin-icon-btn edit" onclick="editProduct(${p.id})" title="Edit">${icon('pencil', 'svg-ic')}</button>
+                    <button class="admin-icon-btn delete" onclick="confirmDelete(${p.id})" title="Hapus">${icon('trash', 'svg-ic')}</button>
                 </div>
             </div>
         `;
@@ -134,7 +144,7 @@ const openForm = (product = null) => {
         originalPrice: document.getElementById('fOriginalPrice'),
         category: document.getElementById('fCategory'),
         condition: document.getElementById('fCondition'),
-        emoji: document.getElementById('fEmoji'),
+        icon: document.getElementById('fIcon'),
         color: document.getElementById('fColor'),
         desc: document.getElementById('fDesc'),
         seller: document.getElementById('fSeller'),
@@ -145,14 +155,14 @@ const openForm = (product = null) => {
     };
 
     if (product) {
-        title.textContent = '✏️ Edit Produk';
+        title.innerHTML = icon('pencil', 'svg-ic') + ' Edit Produk';
         f.id.value = product.id;
         f.name.value = product.name;
         f.price.value = product.price;
         f.originalPrice.value = product.originalPrice;
         f.category.value = product.category;
         f.condition.value = product.condition || '';
-        f.emoji.value = product.emoji || '📦';
+        f.icon.value = product.icon || 'productBag';
         f.color.value = product.color || '#FFB6D9';
         f.desc.value = product.desc || '';
         f.seller.value = product.seller || '';
@@ -164,7 +174,7 @@ const openForm = (product = null) => {
         pendingImageData = product.image || null;
         setImagePreview(pendingImageData);
     } else {
-        title.textContent = '➕ Tambah Produk';
+        title.innerHTML = icon('plus', 'svg-ic') + ' Tambah Produk';
         document.getElementById('productForm').reset();
         f.id.value = '';
         f.stock.value = 1;
@@ -172,7 +182,7 @@ const openForm = (product = null) => {
         f.sold.value = 0;
         f.color.value = '#FFB6D9';
         f.category.value = 'fashion';
-        f.emoji.value = '📦';
+        f.icon.value = 'productBag';
         pendingImageData = null;
         setImagePreview(null);
     }
@@ -187,6 +197,7 @@ const closeForm = () => {
 
 // ═══ INIT ═══
 document.addEventListener('DOMContentLoaded', () => {
+    hydrateIcons();
     renderStats();
     renderGrid();
 
@@ -205,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!file) return;
 
         if (file.size > 5 * 1024 * 1024) {
-            showToast('⚠️ Foto terlalu besar (max 5MB)');
+            showToast(icon('warning', 'svg-ic') + ' Foto terlalu besar (max 5MB)');
             e.target.value = '';
             return;
         }
@@ -216,9 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const compressed = await compressImage(file);
             pendingImageData = compressed;
             setImagePreview(compressed);
-            showToast('✅ Foto siap!');
+            showToast(icon('check', 'svg-ic') + ' Foto siap!');
         } catch (err) {
-            showToast('❌ Gagal kompres foto');
+            showToast(icon('warning', 'svg-ic') + ' Gagal kompres foto');
         }
 
         e.target.value = '';
@@ -228,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
         pendingImageData = null;
         setImagePreview(null);
-        showToast('🗑️ Foto dihapus');
+        showToast(icon('trash', 'svg-ic') + ' Foto dihapus');
     });
 
     // ─── Form Submit ───
@@ -244,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             originalPrice: parseInt(document.getElementById('fOriginalPrice').value) || 0,
             category: document.getElementById('fCategory').value,
             condition: document.getElementById('fCondition').value.trim() || 'Bagus',
-            emoji: document.getElementById('fEmoji').value.trim() || '📦',
+            icon: document.getElementById('fIcon').value,
             color: document.getElementById('fColor').value,
             desc: document.getElementById('fDesc').value.trim(),
             seller: document.getElementById('fSeller').value.trim() || 'Admin',
@@ -261,11 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const idx = products.findIndex(p => p.id === parseInt(idVal));
             if (idx > -1) {
                 products[idx] = { ...products[idx], ...data };
-                showToast('✏️ Produk diperbarui!');
+                showToast(icon('pencil', 'svg-ic') + ' Produk diperbarui!');
             }
         } else {
             products.push({ id: nextId(), ...data });
-            showToast('➕ Produk ditambahkan!');
+            showToast(icon('plus', 'svg-ic') + ' Produk ditambahkan!');
         }
 
         saveProducts();
@@ -297,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.download = `sugarcloset_${Date.now()}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast('📥 Produk di-export!');
+        showToast(icon('download', 'svg-ic') + ' Produk di-export!');
     });
 
     // ─── Export products.js ───
@@ -338,7 +349,7 @@ const FAQS = ${JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [], null, 4)}
         a.download = 'products.js';
         a.click();
         URL.revokeObjectURL(url);
-        showToast('📄 products.js di-download! Kirim ke developer ya~');
+        showToast(icon('doc', 'svg-ic') + ' products.js di-download! Kirim ke developer ya~');
     });
 
     // ─── Import ───
@@ -358,9 +369,9 @@ const FAQS = ${JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [], null, 4)}
                 saveProducts();
                 renderStats();
                 renderGrid();
-                showToast(`📤 ${imported.length} produk di-import!`);
+                showToast(icon('upload', 'svg-ic') + ` ${imported.length} produk di-import!`);
             } catch (err) {
-                showToast('❌ File tidak valid');
+                showToast(icon('warning', 'svg-ic') + ' File tidak valid');
             }
         };
         reader.readAsText(file);
@@ -369,12 +380,12 @@ const FAQS = ${JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [], null, 4)}
 
     // ─── Reset ───
     document.getElementById('resetBtn').addEventListener('click', () => {
-        showConfirm('🔄 Reset ke Default?', 'Semua perubahan akan hilang.', () => {
+        showConfirm(icon('refresh', 'svg-ic') + ' Reset ke Default?', 'Semua perubahan akan hilang.', () => {
             localStorage.removeItem('sugarcloset_products_v2');
             products = [...DEFAULT_PRODUCTS];
             renderStats();
             renderGrid();
-            showToast('🔄 Produk direset!');
+            showToast(icon('refresh', 'svg-ic') + ' Produk direset!');
         });
     });
 
@@ -392,12 +403,12 @@ window.editProduct = (id) => {
 window.confirmDelete = (id) => {
     const p = products.find(x => x.id === id);
     if (!p) return;
-    showConfirm('🗑️ Hapus Produk?', `"${p.name}" akan dihapus permanen.`, () => {
+    showConfirm(icon('trash', 'svg-ic') + ' Hapus Produk?', `"${p.name}" akan dihapus permanen.`, () => {
         products = products.filter(x => x.id !== id);
         saveProducts();
         renderStats();
         renderGrid(document.getElementById('adminSearch').value);
-        showToast('🗑️ Produk dihapus');
+        showToast(icon('trash', 'svg-ic') + ' Produk dihapus');
     });
 };
 
