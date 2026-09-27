@@ -17,7 +17,7 @@ const DEFAULT_PRODUCTS = [
     { id: 12, image: "images/produk-12.jpg", name: "Buku Puisi Cinta", price: 38000, originalPrice: 90000, category: "buku", condition: "Mulus 9/10", emoji: "📖", color: "#FFCCE5", desc: "Kumpulan puisi cinta yang manis. Cocok untuk hadiah atau koleksi.", seller: "Kak Rara", stock: 1, rating: 5, sold: 5, tags: ["puisi", "cinta"] }
 ];
 
-const STORED = localStorage.getItem('sugarcloset_products');
+const STORED = localStorage.getItem('sugarcloset_products_v2');
 const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
 
 const SHOP_INFO = {
