@@ -811,9 +811,34 @@ window.shareProduct = shareProduct;
 window.openReviewForm = openReviewForm;
 window.applySearchHistory = applySearchHistory;
 
+// ─── Dark Mode ───
+const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('sugarcloset_theme', theme); } catch (e) {}
+    const btn = document.getElementById('themeToggle');
+    if (btn) btn.innerHTML = icon(theme === 'dark' ? 'sun' : 'moon', 'svg-ic');
+};
+const initTheme = () => {
+    let theme = 'light';
+    try {
+        theme = localStorage.getItem('sugarcloset_theme')
+            || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch (e) {}
+    document.documentElement.setAttribute('data-theme', theme);
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+        btn.innerHTML = icon(theme === 'dark' ? 'sun' : 'moon', 'svg-ic');
+        btn.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            applyTheme(cur === 'dark' ? 'light' : 'dark');
+        });
+    }
+};
+
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
     hydrateIcons();
+    initTheme();
     initPromoBanner();
     initFloatingHearts();
     initEvents();
