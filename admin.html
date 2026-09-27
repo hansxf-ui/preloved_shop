@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>🔧 Admin — Sugarcloset</title>
+<title>Admin — Sugarcloset</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="admin.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF8FB3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'/></svg>">
 </head>
 <body class="admin-body">
 
 <header class="header admin-header">
     <div class="container header-inner">
         <a href="admin.html" class="logo">
-            <span class="logo-icon">🔧</span>
+            <span class="logo-icon" data-icon="wrench"></span>
             <span class="logo-text">Admin Panel</span>
         </a>
         <div class="header-actions">
             <a href="index.html" class="icon-btn" title="Lihat Toko" style="text-decoration:none;">
-                <span>🏪</span>
+                <span data-icon="store"></span>
             </a>
         </div>
     </div>
@@ -33,26 +33,26 @@
         <div class="admin-title">
             <h1>Panel Kelola Produk</h1>
             <p>Kelola barang preloved dari sini — tanpa edit kode.</p>
-            <p class="admin-note">💡 Perubahan di sini tersimpan di browser ini saja. Untuk update toko aslinya, klik <b>📄 products.js</b> lalu kirim file-nya ke developer.</p>
+            <p class="admin-note"><span data-icon="bulb"></span> Perubahan di sini tersimpan di browser ini saja. Untuk update toko aslinya, klik <b><span data-icon="doc"></span> products.js</b> lalu kirim file-nya ke developer.</p>
         </div>
 
         <div class="admin-stats" id="adminStats">
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">📦</div>
+                <div class="admin-stat-icon" data-icon="box"></div>
                 <div>
                     <div class="admin-stat-label">Total Produk</div>
                     <div class="admin-stat-value" id="statTotal">0</div>
                 </div>
             </div>
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">💰</div>
+                <div class="admin-stat-icon" data-icon="money"></div>
                 <div>
                     <div class="admin-stat-label">Total Nilai</div>
                     <div class="admin-stat-value" id="statValue">Rp 0</div>
                 </div>
             </div>
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">🏷️</div>
+                <div class="admin-stat-icon" data-icon="tag"></div>
                 <div>
                     <div class="admin-stat-label">Kategori</div>
                     <div class="admin-stat-value" id="statCat">0</div>
@@ -62,15 +62,15 @@
 
         <div class="admin-toolbar">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon" data-icon="search"></span>
                 <input type="text" id="adminSearch" placeholder="Cari produk...">
             </div>
             <div class="admin-actions">
-                <button class="btn btn-primary" id="addProductBtn">➕ Tambah</button>
-                <button class="btn btn-secondary" id="exportBtn">📥 Export</button>
-                <button class="btn btn-secondary" id="exportJsBtn" title="Download products.js untuk update toko permanen">📄 products.js</button>
-                <button class="btn btn-secondary" id="importBtn">📤 Import</button>
-                <button class="btn btn-secondary" id="resetBtn">🔄 Reset</button>
+                <button class="btn btn-primary" id="addProductBtn"><span data-icon="plus"></span> Tambah</button>
+                <button class="btn btn-secondary" id="exportBtn"><span data-icon="download"></span> Export</button>
+                <button class="btn btn-secondary" id="exportJsBtn" title="Download products.js untuk update toko permanen"><span data-icon="doc"></span> products.js</button>
+                <button class="btn btn-secondary" id="importBtn"><span data-icon="upload"></span> Import</button>
+                <button class="btn btn-secondary" id="resetBtn"><span data-icon="refresh"></span> Reset</button>
                 <input type="file" id="importFile" accept=".json" style="display:none;">
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="admin-grid" id="adminGrid"></div>
 
         <div class="empty-state" id="adminEmpty" style="display:none;">
-            <div class="empty-icon">📭</div>
+            <div class="empty-icon" data-icon="box"></div>
             <h3>Belum ada produk</h3>
             <p>Klik "Tambah" untuk mulai.</p>
         </div>
@@ -89,8 +89,8 @@
 <!-- Product Form Modal -->
 <div class="modal" id="productFormModal">
     <div class="modal-content admin-modal">
-        <button class="modal-close" id="formClose">✖</button>
-        <h2 class="modal-title" id="formTitle">➕ Tambah Produk</h2>
+        <button class="modal-close" id="formClose"><span data-icon="close"></span></button>
+        <h2 class="modal-title" id="formTitle"><span data-icon="plus"></span> Tambah Produk</h2>
 
         <form id="productForm" class="admin-form">
             <input type="hidden" id="fId">
@@ -98,13 +98,13 @@
 
             <!-- FOTO PRODUK -->
             <div class="form-row">
-                <label>📸 Foto Produk</label>
+                <label><span data-icon="imageIcon"></span> Foto Produk</label>
                 <div class="image-upload-box" id="imageUploadBox">
                     <div class="image-preview" id="imagePreview">
-                        <span class="image-preview-placeholder">📷 Ketuk untuk pilih foto</span>
+                        <span class="image-preview-placeholder"><span data-icon="imageIcon"></span> Ketuk untuk pilih foto</span>
                     </div>
                     <input type="file" id="fImageFile" accept="image/*" style="display:none;">
-                    <button type="button" class="image-remove-btn" id="imageRemoveBtn" style="display:none;">✖</button>
+                    <button type="button" class="image-remove-btn" id="imageRemoveBtn" style="display:none;"><span data-icon="close"></span></button>
                 </div>
                 <small class="form-hint">Foto otomatis dikompres · Max 5MB</small>
             </div>
@@ -129,12 +129,12 @@
                 <div>
                     <label>Kategori *</label>
                     <select id="fCategory" required>
-                        <option value="fashion">👗 Fashion</option>
-                        <option value="tas">👜 Tas</option>
-                        <option value="sepatu">👠 Sepatu</option>
-                        <option value="aksesoris">💍 Aksesoris</option>
-                        <option value="buku">📚 Buku</option>
-                        <option value="elektronik">🎧 Elektronik</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="tas">Tas</option>
+                        <option value="sepatu">Sepatu</option>
+                        <option value="aksesoris">Aksesoris</option>
+                        <option value="buku">Buku</option>
+                        <option value="elektronik">Elektronik</option>
                     </select>
                 </div>
                 <div>
@@ -145,15 +145,23 @@
 
             <div class="form-row-2">
                 <div>
-                    <label>Emoji Cadangan *</label>
-                    <input type="text" id="fEmoji" required placeholder="👜" maxlength="4">
+                    <label>Ikon Cadangan</label>
+                    <select id="fIcon">
+                        <option value="productBag">Tas</option>
+                        <option value="productDress">Fashion</option>
+                        <option value="productShoes">Sepatu</option>
+                        <option value="productRing">Aksesoris</option>
+                        <option value="productBook">Buku</option>
+                        <option value="productHeadphone">Elektronik</option>
+                        <option value="productGeneric">Umum</option>
+                    </select>
                 </div>
                 <div>
                     <label>Warna Card *</label>
                     <input type="color" id="fColor" value="#FFB6D9">
                 </div>
             </div>
-            <small class="form-hint" style="margin-top:-6px; padding-left:4px;">Emoji dipakai kalau foto belum di-upload</small>
+            <small class="form-hint" style="margin-top:-6px; padding-left:4px;">Ikon SVG dipakai kalau foto belum di-upload</small>
 
             <div class="form-row">
                 <label>Deskripsi *</label>
@@ -189,7 +197,7 @@
 
             <div class="admin-form-actions">
                 <button type="button" class="btn btn-secondary" id="cancelBtn">Batal</button>
-                <button type="submit" class="btn btn-primary">💾 Simpan</button>
+                <button type="submit" class="btn btn-primary"><span data-icon="check"></span> Simpan</button>
             </div>
         </form>
     </div>
@@ -197,6 +205,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="icons.js"></script>
 <script src="products.js"></script>
 <script src="admin.js"></script>
 </body>
