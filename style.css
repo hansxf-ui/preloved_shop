@@ -2218,3 +2218,21 @@ img, svg { max-width: 100%; height: auto; }
     .related-price { font-size: 10px; }
     .star-picker .star { font-size: 28px; }
 }
+
+/* ═══ Status Stok Habis (v2) ═══ */
+.product-badge.soldout {
+    background: #9aa0a6;
+}
+.product-card.is-soldout .product-image {
+    filter: grayscale(0.7);
+}
+.product-card.is-soldout .product-photo,
+.product-card.is-soldout .product-emoji {
+    opacity: 0.6;
+}
+.product-add:disabled,
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+}
