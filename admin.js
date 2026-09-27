@@ -300,6 +300,47 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('📥 Produk di-export!');
     });
 
+    // ─── Export products.js ───
+    // Download file products.js lengkap supaya perubahan produk bisa
+    // di-commit ke repo dan tampil permanen untuk semua pengunjung.
+    document.getElementById('exportJsBtn').addEventListener('click', () => {
+        const today = new Date().toISOString().slice(0, 10);
+        const js = `// ═══════════════════════════════════════════
+//  PRODUK DEFAULT — Sugarcloset
+//  Dibuat dari Admin Panel pada ${today}
+//  Upload file ini ke repo (menggantikan products.js lama)
+// ═══════════════════════════════════════════
+
+const DEFAULT_PRODUCTS = ${JSON.stringify(products, null, 4)};
+
+const STORED = localStorage.getItem('sugarcloset_products');
+const PRODUCTS = STORED ? JSON.parse(STORED) : DEFAULT_PRODUCTS;
+
+const SHOP_INFO = ${JSON.stringify(typeof SHOP_INFO !== 'undefined' ? SHOP_INFO : {}, null, 4)};
+
+// ═══════════════════════════════════════════
+//  TESTIMONI PEMBELI
+//  Silakan tambah/edit testimoni di sini
+// ═══════════════════════════════════════════
+
+const TESTIMONIALS = ${JSON.stringify(typeof TESTIMONIALS !== 'undefined' ? TESTIMONIALS : [], null, 4)};
+
+// ═══════════════════════════════════════════
+//  FAQ (Pertanyaan Umum)
+// ═══════════════════════════════════════════
+
+const FAQS = ${JSON.stringify(typeof FAQS !== 'undefined' ? FAQS : [], null, 4)};
+`;
+        const blob = new Blob([js], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'products.js';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📄 products.js di-download! Kirim ke developer ya~');
+    });
+
     // ─── Import ───
     document.getElementById('importBtn').addEventListener('click', () => {
         document.getElementById('importFile').click();
