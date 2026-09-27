@@ -384,12 +384,12 @@ img, svg { max-width: 100%; height: auto; }
     transform: scale(1.15) rotate(5deg);
 }
 
-.c1 { top: 2%;    left: 4%;    animation: float1 6s ease-in-out infinite; }
-.c2 { top: 8%;    right: 4%;   animation: float2 5s ease-in-out infinite; }
-.c3 { top: 34%;   right: 6%;   animation: float3 7s ease-in-out infinite; }
-.c4 { bottom: 6%; left: 8%;    animation: float1 6.5s ease-in-out infinite; }
-.c5 { bottom: 2%; right: 28%;  animation: float2 5.5s ease-in-out infinite; }
-.c6 { top: 36%;   left: 36%;   animation: float3 8s ease-in-out infinite; }
+.c1 { top: 1%;    left: 5%;   animation: float1 6s ease-in-out infinite; }
+.c2 { top: 1%;    right: 4%;  animation: float2 5s ease-in-out infinite; }
+.c3 { top: 35%;   right: 7%;  animation: float3 7s ease-in-out infinite; }
+.c4 { bottom: 0%; left: 7%;   animation: float1 6.5s ease-in-out infinite; }
+.c5 { bottom: 0%; right: 26%; animation: float2 5.5s ease-in-out infinite; }
+.c6 { top: 35%;   left: 33%;  animation: float3 8s ease-in-out infinite; }
 
 @keyframes float1 {
     0%, 100% { transform: translateY(0) rotate(0deg); }
