@@ -2322,3 +2322,4 @@ img, svg { max-width: 100%; height: auto; }
     .hero-card .svg-ic { width: 46px; height: 46px; }
     .star-picker .star .svg-ic { width: 28px; height: 28px; }
 }
+.testimonial-avatar .svg-ic { width: 24px; height: 24px; color: var(--pink-dark); }
